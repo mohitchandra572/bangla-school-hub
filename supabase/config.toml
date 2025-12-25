@@ -5,3 +5,9 @@ verify_jwt = false
 
 [functions.setup-admin]
 verify_jwt = false
+
+[functions.bkash-payment]
+verify_jwt = false
+
+[functions.sslcommerz-payment]
+verify_jwt = false
