@@ -1,96 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    /* Deep Blue - Primary (Trust, Education) */
+    --primary: 210 65% 20%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Emerald Green - Secondary (Bangladesh) */
+    --secondary: 145 63% 32%;
+    --secondary-foreground: 0 0% 100%;
+    
+    /* Golden Accent */
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 10%;
+    
+    /* Background & Surface */
+    --background: 210 25% 97%;
+    --foreground: 210 50% 10%;
+    
+    /* Cards */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 210 50% 10%;
+    
+    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --popover-foreground: 210 50% 10%;
+    
+    /* Muted */
+    --muted: 210 20% 94%;
+    --muted-foreground: 210 15% 40%;
+    
+    /* Border & Input */
+    --border: 210 20% 88%;
+    --input: 210 20% 88%;
+    --ring: 210 65% 20%;
+    
+    /* Destructive */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Radius */
+    --radius: 0.75rem;
+    
+    /* Sidebar */
+    --sidebar-background: 210 65% 15%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 38 92% 50%;
+    --sidebar-primary-foreground: 0 0% 10%;
+    --sidebar-accent: 210 50% 25%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 210 40% 25%;
+    --sidebar-ring: 38 92% 50%;
+    
+    /* Custom Design Tokens */
+    --gradient-hero: linear-gradient(135deg, hsl(210 65% 20%) 0%, hsl(210 65% 30%) 50%, hsl(145 63% 32%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(38 92% 60%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 25% 98%) 100%);
+    --gradient-overlay: linear-gradient(180deg, hsla(210 65% 20% / 0.8) 0%, hsla(210 65% 10% / 0.95) 100%);
+    
+    --shadow-soft: 0 4px 20px -4px hsla(210 65% 20% / 0.1);
+    --shadow-card: 0 8px 30px -8px hsla(210 65% 20% / 0.12);
+    --shadow-elevated: 0 20px 50px -15px hsla(210 65% 20% / 0.15);
+    --shadow-glow: 0 0 40px hsla(38 92% 50% / 0.3);
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --primary: 210 50% 85%;
+    --primary-foreground: 210 65% 10%;
+    
+    --secondary: 145 50% 60%;
+    --secondary-foreground: 145 63% 10%;
+    
+    --accent: 38 92% 55%;
+    --accent-foreground: 0 0% 10%;
+    
+    --background: 210 50% 8%;
+    --foreground: 210 20% 95%;
+    
+    --card: 210 45% 12%;
+    --card-foreground: 210 20% 95%;
+    
+    --popover: 210 45% 12%;
+    --popover-foreground: 210 20% 95%;
+    
+    --muted: 210 30% 18%;
+    --muted-foreground: 210 15% 60%;
+    
+    --border: 210 30% 22%;
+    --input: 210 30% 22%;
+    --ring: 210 50% 85%;
+    
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --sidebar-background: 210 50% 6%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 38 92% 55%;
+    --sidebar-primary-foreground: 0 0% 10%;
+    --sidebar-accent: 210 40% 15%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 210 30% 18%;
+    --sidebar-ring: 38 92% 55%;
   }
 }
 
@@ -99,7 +116,132 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  /* Bangla Typography */
+  .font-bangla {
+    font-family: 'Noto Sans Bengali', sans-serif;
+  }
+
+  .font-display {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer components {
+  /* Hero Section Styles */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+  
+  .hero-overlay {
+    background: var(--gradient-overlay);
+  }
+  
+  /* Card Styles */
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-elevated hover:-translate-y-1;
+  }
+  
+  /* Button Styles */
+  .btn-accent {
+    @apply bg-accent text-accent-foreground font-semibold px-6 py-3 rounded-lg;
+    @apply hover:brightness-110 transition-all duration-300;
+    @apply shadow-md hover:shadow-glow;
+  }
+  
+  .btn-outline-light {
+    @apply border-2 border-primary-foreground/30 text-primary-foreground;
+    @apply hover:bg-primary-foreground/10 transition-all duration-300;
+  }
+  
+  /* Glass Effect */
+  .glass {
+    @apply bg-card/80 backdrop-blur-md border border-border/50;
+  }
+  
+  /* Animated Underline */
+  .animated-underline {
+    @apply relative;
+  }
+  
+  .animated-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300;
+  }
+  
+  .animated-underline:hover::after {
+    @apply w-full;
+  }
+  
+  /* Section Title */
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-foreground mb-2 font-bangla;
+  }
+  
+  .section-subtitle {
+    @apply text-muted-foreground text-lg mb-8 font-bangla;
+  }
+  
+  /* Notice Card */
+  .notice-card {
+    @apply bg-card rounded-xl p-6 border-l-4 border-accent;
+    box-shadow: var(--shadow-card);
+  }
+  
+  /* Stats Card */
+  .stats-card {
+    @apply bg-card rounded-2xl p-6 text-center;
+    box-shadow: var(--shadow-soft);
+  }
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+  
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-accent);
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
   }
 }
