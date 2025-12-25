@@ -14,6 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      absence_responses: {
+        Row: {
+          acknowledged_at: string | null
+          admin_note: string | null
+          admin_reviewed_at: string | null
+          admin_reviewed_by: string | null
+          admin_status: string | null
+          attendance_id: string
+          correction_note: string | null
+          created_at: string | null
+          document_url: string | null
+          id: string
+          is_acknowledged: boolean | null
+          parent_id: string
+          reason_category: string | null
+          reason_category_bn: string | null
+          reason_text: string | null
+          reason_text_bn: string | null
+          response_type: string
+          student_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          admin_note?: string | null
+          admin_reviewed_at?: string | null
+          admin_reviewed_by?: string | null
+          admin_status?: string | null
+          attendance_id: string
+          correction_note?: string | null
+          created_at?: string | null
+          document_url?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          parent_id: string
+          reason_category?: string | null
+          reason_category_bn?: string | null
+          reason_text?: string | null
+          reason_text_bn?: string | null
+          response_type?: string
+          student_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          admin_note?: string | null
+          admin_reviewed_at?: string | null
+          admin_reviewed_by?: string | null
+          admin_status?: string | null
+          attendance_id?: string
+          correction_note?: string | null
+          created_at?: string | null
+          document_url?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          parent_id?: string
+          reason_category?: string | null
+          reason_category_bn?: string | null
+          reason_text?: string | null
+          reason_text_bn?: string | null
+          response_type?: string
+          student_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "absence_responses_attendance_id_fkey"
+            columns: ["attendance_id"]
+            isOneToOne: false
+            referencedRelation: "attendance"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "absence_responses_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       admit_cards: {
         Row: {
           admit_number: string

@@ -35,6 +35,9 @@ import ReportsPage from "./pages/dashboard/ReportsPage";
 import ExamRoutineManagement from "./pages/dashboard/exams/ExamRoutineManagement";
 import AdmitCardGeneration from "./pages/dashboard/exams/AdmitCardGeneration";
 import ResultsVerification from "./pages/dashboard/exams/ResultsVerification";
+import AbsenceResponsePage from "./pages/dashboard/parent/AbsenceResponsePage";
+import ParentAttendanceHistory from "./pages/dashboard/parent/ParentAttendanceHistory";
+import AbsenceResponsesManagement from "./pages/dashboard/AbsenceResponsesManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -82,6 +85,13 @@ const App = () => (
             <Route path="/dashboard/exams/:examId/verify" element={<ResultsVerification />} />
             <Route path="/dashboard/fees" element={<FeeManagementPage />} />
             <Route path="/dashboard/reports" element={<ReportsPage />} />
+            
+            {/* Parent Routes */}
+            <Route path="/dashboard/parent/absence-response/:attendanceId" element={<AbsenceResponsePage />} />
+            <Route path="/dashboard/parent/attendance-history" element={<ParentAttendanceHistory />} />
+            
+            {/* Admin Absence Management */}
+            <Route path="/dashboard/absence-responses" element={<AbsenceResponsesManagement />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
