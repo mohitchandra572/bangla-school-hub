@@ -214,12 +214,12 @@ export default function TeacherAttendance() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium font-bangla">শাখা</label>
-                <Select value={selectedSection} onValueChange={setSelectedSection}>
+                <Select value={selectedSection} onValueChange={(val) => setSelectedSection(val === 'all' ? '' : val)}>
                   <SelectTrigger className="font-bangla">
                     <SelectValue placeholder="শাখা নির্বাচন করুন" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">সকল শাখা</SelectItem>
+                    <SelectItem value="all">সকল শাখা</SelectItem>
                     {sections.map((sec: string) => (
                       <SelectItem key={sec} value={sec}>{sec} শাখা</SelectItem>
                     ))}
