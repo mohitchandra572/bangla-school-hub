@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      admit_cards: {
+        Row: {
+          admit_number: string
+          created_at: string | null
+          documents_complete: boolean | null
+          downloaded_at: string | null
+          eligibility_reason: string | null
+          eligibility_status: string | null
+          exam_id: string
+          fees_cleared: boolean | null
+          generated_at: string | null
+          generated_by: string | null
+          id: string
+          is_downloaded: boolean | null
+          qr_code_data: string | null
+          student_id: string
+        }
+        Insert: {
+          admit_number: string
+          created_at?: string | null
+          documents_complete?: boolean | null
+          downloaded_at?: string | null
+          eligibility_reason?: string | null
+          eligibility_status?: string | null
+          exam_id: string
+          fees_cleared?: boolean | null
+          generated_at?: string | null
+          generated_by?: string | null
+          id?: string
+          is_downloaded?: boolean | null
+          qr_code_data?: string | null
+          student_id: string
+        }
+        Update: {
+          admit_number?: string
+          created_at?: string | null
+          documents_complete?: boolean | null
+          downloaded_at?: string | null
+          eligibility_reason?: string | null
+          eligibility_status?: string | null
+          exam_id?: string
+          fees_cleared?: boolean | null
+          generated_at?: string | null
+          generated_by?: string | null
+          id?: string
+          is_downloaded?: boolean | null
+          qr_code_data?: string | null
+          student_id?: string
+        }
+        Relationships: []
+      }
       attendance: {
         Row: {
           created_at: string
@@ -197,6 +248,48 @@ export type Database = {
           },
         ]
       }
+      exam_routines: {
+        Row: {
+          created_at: string | null
+          end_time: string
+          exam_date: string
+          exam_id: string
+          id: string
+          room_no: string | null
+          start_time: string
+          subject: string
+          subject_bn: string | null
+          total_marks: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          end_time: string
+          exam_date: string
+          exam_id: string
+          id?: string
+          room_no?: string | null
+          start_time: string
+          subject: string
+          subject_bn?: string | null
+          total_marks?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          end_time?: string
+          exam_date?: string
+          exam_id?: string
+          id?: string
+          room_no?: string | null
+          start_time?: string
+          subject?: string
+          subject_bn?: string | null
+          total_marks?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       exams: {
         Row: {
           academic_year: string | null
@@ -207,6 +300,7 @@ export type Database = {
           id: string
           name: string
           name_bn: string | null
+          section: string | null
           start_date: string
           status: string | null
           updated_at: string
@@ -220,6 +314,7 @@ export type Database = {
           id?: string
           name: string
           name_bn?: string | null
+          section?: string | null
           start_date: string
           status?: string | null
           updated_at?: string
@@ -233,6 +328,7 @@ export type Database = {
           id?: string
           name?: string
           name_bn?: string | null
+          section?: string | null
           start_date?: string
           status?: string | null
           updated_at?: string
@@ -447,6 +543,54 @@ export type Database = {
         }
         Relationships: []
       }
+      grading_rules: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          grade_code: string
+          grade_name_bn: string | null
+          grade_point: number
+          id: string
+          is_active: boolean | null
+          is_passing: boolean | null
+          max_marks: number
+          min_marks: number
+          name: string
+          name_bn: string | null
+          remarks_bn: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          grade_code: string
+          grade_name_bn?: string | null
+          grade_point: number
+          id?: string
+          is_active?: boolean | null
+          is_passing?: boolean | null
+          max_marks: number
+          min_marks: number
+          name: string
+          name_bn?: string | null
+          remarks_bn?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          grade_code?: string
+          grade_name_bn?: string | null
+          grade_point?: number
+          id?: string
+          is_active?: boolean | null
+          is_passing?: boolean | null
+          max_marks?: number
+          min_marks?: number
+          name?: string
+          name_bn?: string | null
+          remarks_bn?: string | null
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
@@ -612,6 +756,9 @@ export type Database = {
           subject: string
           total_marks: number | null
           updated_at: string
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
         }
         Insert: {
           created_at?: string
@@ -624,6 +771,9 @@ export type Database = {
           subject: string
           total_marks?: number | null
           updated_at?: string
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Update: {
           created_at?: string
@@ -636,6 +786,9 @@ export type Database = {
           subject?: string
           total_marks?: number | null
           updated_at?: string
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Relationships: [
           {
@@ -838,6 +991,7 @@ export type Database = {
           permanent_district: string | null
           permanent_upazila: string | null
           phone: string | null
+          photo_url: string | null
           present_address: string | null
           present_district: string | null
           present_upazila: string | null
@@ -884,6 +1038,7 @@ export type Database = {
           permanent_district?: string | null
           permanent_upazila?: string | null
           phone?: string | null
+          photo_url?: string | null
           present_address?: string | null
           present_district?: string | null
           present_upazila?: string | null
@@ -930,6 +1085,7 @@ export type Database = {
           permanent_district?: string | null
           permanent_upazila?: string | null
           phone?: string | null
+          photo_url?: string | null
           present_address?: string | null
           present_district?: string | null
           present_upazila?: string | null
