@@ -20,10 +20,11 @@ const menuItems = {
   super_admin: [
     { icon: LayoutDashboard, label: 'ড্যাশবোর্ড', href: '/dashboard' },
     { icon: Shield, label: 'স্কুল ম্যানেজমেন্ট', href: '/dashboard/schools' },
-    { icon: Users, label: 'ব্যবহারকারী', href: '/dashboard/users' },
+    { icon: CreditCard, label: 'সাবস্ক্রিপশন প্ল্যান', href: '/dashboard/plans' },
+    { icon: Users, label: 'অভিভাবক', href: '/dashboard/parents' },
     { icon: Activity, label: 'অডিট লগ', href: '/dashboard/audit' },
     { icon: BarChart3, label: 'রিপোর্ট', href: '/dashboard/reports' },
-    { icon: Settings, label: 'সেটিংস', href: '/dashboard/settings' },
+    { icon: Settings, label: 'সিস্টেম সেটিংস', href: '/dashboard/system-settings' },
   ],
   school_admin: [
     { icon: LayoutDashboard, label: 'ড্যাশবোর্ড', href: '/dashboard' },
