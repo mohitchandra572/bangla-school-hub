@@ -5,7 +5,7 @@ import {
   GraduationCap, LayoutDashboard, Users, UserCheck, BookOpen, 
   ClipboardList, CreditCard, Bell, MessageSquare, BarChart3, 
   Settings, LogOut, ChevronLeft, ChevronRight, Home, FileText,
-  Calendar, Award, Shield, Activity
+  Calendar, Award, Shield, Activity, DollarSign
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,9 +18,10 @@ interface DashboardLayoutProps {
 
 const menuItems = {
   super_admin: [
-    { icon: LayoutDashboard, label: 'ড্যাশবোর্ড', href: '/dashboard' },
+    { icon: LayoutDashboard, label: 'ড্যাশবোর্ড', href: '/dashboard/super-admin' },
     { icon: Shield, label: 'স্কুল ম্যানেজমেন্ট', href: '/dashboard/schools' },
     { icon: CreditCard, label: 'সাবস্ক্রিপশন প্ল্যান', href: '/dashboard/plans' },
+    { icon: DollarSign, label: 'বিলিং', href: '/dashboard/billing' },
     { icon: Users, label: 'অভিভাবক', href: '/dashboard/parents' },
     { icon: Activity, label: 'অডিট লগ', href: '/dashboard/audit' },
     { icon: BarChart3, label: 'রিপোর্ট', href: '/dashboard/reports' },

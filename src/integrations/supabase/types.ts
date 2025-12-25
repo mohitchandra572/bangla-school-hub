@@ -654,6 +654,59 @@ export type Database = {
           },
         ]
       }
+      school_payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          created_by: string | null
+          id: string
+          notes: string | null
+          payment_date: string | null
+          payment_method: string | null
+          period_end: string
+          period_start: string
+          school_id: string
+          status: string | null
+          transaction_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          period_end: string
+          period_start: string
+          school_id: string
+          status?: string | null
+          transaction_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          period_end?: string
+          period_start?: string
+          school_id?: string
+          status?: string | null
+          transaction_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_payments_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       school_users: {
         Row: {
           created_at: string | null
