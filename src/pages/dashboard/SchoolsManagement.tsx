@@ -10,8 +10,9 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Plus, Edit2, Trash2, Building2, Users, GraduationCap, PlayCircle, PauseCircle, Search } from 'lucide-react';
+import { Plus, Edit2, Trash2, Building2, Users, GraduationCap, PlayCircle, PauseCircle, Search, Copy, Key } from 'lucide-react';
 
 type SubscriptionPlan = 'basic' | 'standard' | 'premium' | 'enterprise';
 
@@ -35,6 +36,12 @@ interface SchoolStats {
   total_teachers: number;
 }
 
+interface GeneratedCredentials {
+  email: string;
+  password: string;
+  schoolName: string;
+}
+
 const planColors: Record<SubscriptionPlan, string> = {
   basic: 'bg-gray-100 text-gray-800',
   standard: 'bg-blue-100 text-blue-800',
@@ -54,6 +61,9 @@ export default function SchoolsManagement() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingSchool, setEditingSchool] = useState<School | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [createAdminAccount, setCreateAdminAccount] = useState(true);
+  const [showCredentials, setShowCredentials] = useState(false);
+  const [generatedCredentials, setGeneratedCredentials] = useState<GeneratedCredentials | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     name_bn: '',
@@ -62,6 +72,9 @@ export default function SchoolsManagement() {
     phone: '',
     email: '',
     subscription_plan: 'basic' as SubscriptionPlan,
+    admin_name: '',
+    admin_email: '',
+    admin_password: '',
   });
 
   // Fetch schools
@@ -95,21 +108,74 @@ export default function SchoolsManagement() {
   // Create school mutation
   const createSchool = useMutation({
     mutationFn: async (data: typeof formData) => {
+      // First create the school
       const { data: result, error } = await supabase
         .from('schools')
         .insert([{
-          ...data,
+          name: data.name,
+          name_bn: data.name_bn,
+          code: data.code,
+          address: data.address,
+          phone: data.phone,
+          email: data.email,
           subscription_plan: data.subscription_plan,
         }])
         .select()
         .single();
       
       if (error) throw error;
-      return result;
+
+      // If creating admin account, call the setup-admin edge function
+      if (createAdminAccount && data.admin_email && data.admin_password) {
+        const { data: adminResult, error: adminError } = await supabase.functions.invoke('setup-admin', {
+          body: {
+            email: data.admin_email,
+            password: data.admin_password,
+            full_name: data.admin_name || data.name + ' Admin',
+            role: 'school_admin',
+            school_name: data.name,
+            school_code: data.code,
+          },
+        });
+
+        if (adminError) {
+          console.error('Admin creation error:', adminError);
+          // Still return the school, but notify about admin error
+          return { school: result, adminError: adminError.message };
+        }
+
+        // Link existing school to the new admin
+        if (adminResult?.user_id) {
+          await supabase.from('school_users').insert({
+            school_id: result.id,
+            user_id: adminResult.user_id,
+            is_admin: true,
+          });
+        }
+
+        return { 
+          school: result, 
+          credentials: {
+            email: data.admin_email,
+            password: data.admin_password,
+            schoolName: data.name,
+          }
+        };
+      }
+      
+      return { school: result };
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['schools'] });
-      toast.success('স্কুল সফলভাবে তৈরি হয়েছে');
+      
+      if (result.credentials) {
+        setGeneratedCredentials(result.credentials);
+        setShowCredentials(true);
+        toast.success('স্কুল ও অ্যাডমিন একাউন্ট সফলভাবে তৈরি হয়েছে');
+      } else {
+        toast.success('স্কুল সফলভাবে তৈরি হয়েছে');
+      }
+      
       resetForm();
       setIsDialogOpen(false);
     },
@@ -184,7 +250,11 @@ export default function SchoolsManagement() {
       phone: '',
       email: '',
       subscription_plan: 'basic',
+      admin_name: '',
+      admin_email: '',
+      admin_password: '',
     });
+    setCreateAdminAccount(true);
   };
 
   const handleEdit = (school: School) => {
@@ -197,7 +267,11 @@ export default function SchoolsManagement() {
       phone: school.phone || '',
       email: school.email || '',
       subscription_plan: school.subscription_plan,
+      admin_name: '',
+      admin_email: '',
+      admin_password: '',
     });
+    setCreateAdminAccount(false);
     setIsDialogOpen(true);
   };
 
@@ -324,12 +398,143 @@ export default function SchoolsManagement() {
                     />
                   </div>
                 </div>
+
+                {/* School Admin Account Section - Only for new schools */}
+                {!editingSchool && (
+                  <div className="border-t pt-4 mt-4">
+                    <div className="flex items-center space-x-2 mb-4">
+                      <Checkbox
+                        id="createAdmin"
+                        checked={createAdminAccount}
+                        onCheckedChange={(checked) => setCreateAdminAccount(checked as boolean)}
+                      />
+                      <Label htmlFor="createAdmin" className="font-bangla cursor-pointer">
+                        স্কুল অ্যাডমিন একাউন্ট তৈরি করুন
+                      </Label>
+                    </div>
+                    
+                    {createAdminAccount && (
+                      <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground font-bangla">
+                          <Key className="w-4 h-4" />
+                          <span>স্কুল অ্যাডমিন লগইন তথ্য</span>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="font-bangla">অ্যাডমিনের নাম</Label>
+                          <Input
+                            value={formData.admin_name}
+                            onChange={(e) => setFormData({ ...formData, admin_name: e.target.value })}
+                            placeholder="স্কুল অ্যাডমিন"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label className="font-bangla">অ্যাডমিন ইমেইল *</Label>
+                            <Input
+                              type="email"
+                              value={formData.admin_email}
+                              onChange={(e) => setFormData({ ...formData, admin_email: e.target.value })}
+                              placeholder="admin@school.com"
+                              required={createAdminAccount}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="font-bangla">পাসওয়ার্ড *</Label>
+                            <Input
+                              type="password"
+                              value={formData.admin_password}
+                              onChange={(e) => setFormData({ ...formData, admin_password: e.target.value })}
+                              placeholder="••••••••"
+                              required={createAdminAccount}
+                              minLength={6}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <DialogFooter>
-                  <Button type="submit" className="font-bangla">
-                    {editingSchool ? 'আপডেট করুন' : 'তৈরি করুন'}
+                  <Button type="submit" className="font-bangla" disabled={createSchool.isPending}>
+                    {createSchool.isPending ? 'তৈরি হচ্ছে...' : editingSchool ? 'আপডেট করুন' : 'তৈরি করুন'}
                   </Button>
                 </DialogFooter>
               </form>
+            </DialogContent>
+          </Dialog>
+
+          {/* Credentials Display Dialog */}
+          <Dialog open={showCredentials} onOpenChange={setShowCredentials}>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle className="font-bangla flex items-center gap-2">
+                  <Key className="w-5 h-5 text-green-500" />
+                  স্কুল অ্যাডমিন লগইন তথ্য
+                </DialogTitle>
+              </DialogHeader>
+              {generatedCredentials && (
+                <div className="space-y-4">
+                  <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
+                    <p className="text-sm text-green-700 dark:text-green-300 font-bangla mb-3">
+                      স্কুল অ্যাডমিন একাউন্ট সফলভাবে তৈরি হয়েছে। নিচের তথ্যগুলো সংরক্ষণ করুন।
+                    </p>
+                    <div className="space-y-3">
+                      <div>
+                        <Label className="text-xs text-muted-foreground font-bangla">স্কুল</Label>
+                        <p className="font-medium">{generatedCredentials.schoolName}</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground font-bangla">ইমেইল</Label>
+                        <div className="flex items-center gap-2">
+                          <code className="flex-1 bg-background px-3 py-2 rounded border text-sm">
+                            {generatedCredentials.email}
+                          </code>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => {
+                              navigator.clipboard.writeText(generatedCredentials.email);
+                              toast.success('ইমেইল কপি হয়েছে');
+                            }}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground font-bangla">পাসওয়ার্ড</Label>
+                        <div className="flex items-center gap-2">
+                          <code className="flex-1 bg-background px-3 py-2 rounded border text-sm">
+                            {generatedCredentials.password}
+                          </code>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            onClick={() => {
+                              navigator.clipboard.writeText(generatedCredentials.password);
+                              toast.success('পাসওয়ার্ড কপি হয়েছে');
+                            }}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button 
+                      onClick={() => {
+                        setShowCredentials(false);
+                        setGeneratedCredentials(null);
+                      }}
+                      className="font-bangla"
+                    >
+                      বন্ধ করুন
+                    </Button>
+                  </DialogFooter>
+                </div>
+              )}
             </DialogContent>
           </Dialog>
         </div>

@@ -13,6 +13,7 @@ interface SetupAdminRequest {
   role: 'super_admin' | 'school_admin';
   school_name?: string;
   school_code?: string;
+  school_id?: string; // If school already exists
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -32,9 +33,9 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     const body: SetupAdminRequest = await req.json();
-    const { email, password, full_name, role, school_name, school_code } = body;
+    const { email, password, full_name, role, school_name, school_code, school_id } = body;
 
-    console.log("Setting up admin:", { email, role, school_name });
+    console.log("Setting up admin:", { email, role, school_name, school_id });
 
     // Create user in auth.users
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
@@ -84,46 +85,64 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    let school_id = null;
+    let result_school_id = school_id || null;
 
-    // If school_admin, create school and link
-    if (role === 'school_admin' && school_name && school_code) {
-      // Create school
-      const { data: schoolData, error: schoolError } = await supabaseAdmin
-        .from("schools")
-        .insert({
-          name: school_name,
-          code: school_code,
-          created_by: user_id,
-        })
-        .select()
-        .single();
+    // If school_admin, create school (if needed) and link
+    if (role === 'school_admin') {
+      // If school_id provided, use it. Otherwise create new school
+      if (!result_school_id && school_name && school_code) {
+        // Create school
+        const { data: schoolData, error: schoolError } = await supabaseAdmin
+          .from("schools")
+          .insert({
+            name: school_name,
+            code: school_code,
+            created_by: user_id,
+          })
+          .select()
+          .single();
 
-      if (schoolError) {
-        console.error("Error creating school:", schoolError);
-        return new Response(
-          JSON.stringify({ error: schoolError.message }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        if (schoolError) {
+          console.error("Error creating school:", schoolError);
+          // If school already exists with this code, try to find it
+          if (schoolError.code === '23505') { // Unique violation
+            const { data: existingSchool } = await supabaseAdmin
+              .from("schools")
+              .select("id")
+              .eq("code", school_code)
+              .single();
+            
+            if (existingSchool) {
+              result_school_id = existingSchool.id;
+            }
+          } else {
+            return new Response(
+              JSON.stringify({ error: schoolError.message }),
+              { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+          }
+        } else {
+          result_school_id = schoolData.id;
+        }
       }
 
-      school_id = schoolData.id;
-
       // Link user to school as admin
-      const { error: linkError } = await supabaseAdmin
-        .from("school_users")
-        .insert({
-          school_id,
-          user_id,
-          is_admin: true,
-        });
+      if (result_school_id) {
+        const { error: linkError } = await supabaseAdmin
+          .from("school_users")
+          .insert({
+            school_id: result_school_id,
+            user_id,
+            is_admin: true,
+          });
 
-      if (linkError) {
-        console.error("Error linking user to school:", linkError);
+        if (linkError) {
+          console.error("Error linking user to school:", linkError);
+        }
       }
     }
 
-    console.log("Admin setup complete:", { user_id, role, school_id });
+    console.log("Admin setup complete:", { user_id, role, school_id: result_school_id });
 
     return new Response(
       JSON.stringify({
@@ -131,7 +150,7 @@ const handler = async (req: Request): Promise<Response> => {
         user_id,
         email,
         role,
-        school_id,
+        school_id: result_school_id,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
