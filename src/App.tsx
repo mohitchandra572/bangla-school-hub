@@ -17,6 +17,8 @@ import SuperAdminDashboard from "./pages/dashboard/SuperAdminDashboard";
 import SchoolAdminDashboard from "./pages/dashboard/SchoolAdminDashboard";
 import StudentsManagement from "./pages/dashboard/StudentsManagement";
 import AttendanceManagement from "./pages/dashboard/AttendanceManagement";
+import BiometricDevicesManagement from "./pages/dashboard/BiometricDevicesManagement";
+import AttendanceReportsPage from "./pages/dashboard/AttendanceReportsPage";
 import MessagesPage from "./pages/dashboard/MessagesPage";
 import SchoolsManagement from "./pages/dashboard/SchoolsManagement";
 import SubscriptionPlans from "./pages/dashboard/SubscriptionPlans";
@@ -62,6 +64,8 @@ const App = () => (
             <Route path="/dashboard/students" element={<StudentsManagement />} />
             <Route path="/dashboard/students/new" element={<StudentsManagement />} />
             <Route path="/dashboard/attendance" element={<AttendanceManagement />} />
+            <Route path="/dashboard/biometric-devices" element={<BiometricDevicesManagement />} />
+            <Route path="/dashboard/attendance-reports" element={<AttendanceReportsPage />} />
             <Route path="/dashboard/messages" element={<MessagesPage />} />
             <Route path="/dashboard/schools" element={<SchoolsManagement />} />
             <Route path="/dashboard/plans" element={<SubscriptionPlans />} />
