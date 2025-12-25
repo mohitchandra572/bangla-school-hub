@@ -67,29 +67,53 @@ export type Database = {
       }
       attendance: {
         Row: {
+          approval_status: string | null
+          biometric_timestamp: string | null
+          check_in_time: string | null
+          check_out_time: string | null
           created_at: string
           date: string
+          device_id: string | null
           id: string
+          is_late: boolean | null
+          late_minutes: number | null
           marked_by: string | null
           remarks: string | null
+          source: string | null
           status: string
           student_id: string
         }
         Insert: {
+          approval_status?: string | null
+          biometric_timestamp?: string | null
+          check_in_time?: string | null
+          check_out_time?: string | null
           created_at?: string
           date: string
+          device_id?: string | null
           id?: string
+          is_late?: boolean | null
+          late_minutes?: number | null
           marked_by?: string | null
           remarks?: string | null
+          source?: string | null
           status?: string
           student_id: string
         }
         Update: {
+          approval_status?: string | null
+          biometric_timestamp?: string | null
+          check_in_time?: string | null
+          check_out_time?: string | null
           created_at?: string
           date?: string
+          device_id?: string | null
           id?: string
+          is_late?: boolean | null
+          late_minutes?: number | null
           marked_by?: string | null
           remarks?: string | null
+          source?: string | null
           status?: string
           student_id?: string
         }
@@ -102,6 +126,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      attendance_approvals: {
+        Row: {
+          approval_status: string | null
+          approved_at: string | null
+          approved_by: string | null
+          attendance_id: string
+          created_at: string | null
+          id: string
+          notes: string | null
+          rejection_reason: string | null
+          submitted_at: string | null
+          submitted_by: string
+        }
+        Insert: {
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          attendance_id: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          rejection_reason?: string | null
+          submitted_at?: string | null
+          submitted_by: string
+        }
+        Update: {
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          attendance_id?: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          rejection_reason?: string | null
+          submitted_at?: string | null
+          submitted_by?: string
+        }
+        Relationships: []
       }
       audit_logs: {
         Row: {
@@ -141,6 +204,157 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      biometric_devices: {
+        Row: {
+          assigned_classes: string[] | null
+          assigned_sections: string[] | null
+          auth_key: string | null
+          created_at: string | null
+          created_by: string | null
+          device_id: string
+          device_name: string
+          device_name_bn: string | null
+          device_type: string | null
+          error_count: number | null
+          firmware_version: string | null
+          id: string
+          ip_address: string | null
+          is_active: boolean | null
+          last_error: string | null
+          last_error_at: string | null
+          last_heartbeat_at: string | null
+          last_sync_at: string | null
+          location: string | null
+          location_bn: string | null
+          port: number | null
+          school_id: string | null
+          status: string | null
+          sync_interval_minutes: number | null
+          total_synced_records: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_classes?: string[] | null
+          assigned_sections?: string[] | null
+          auth_key?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          device_id: string
+          device_name: string
+          device_name_bn?: string | null
+          device_type?: string | null
+          error_count?: number | null
+          firmware_version?: string | null
+          id?: string
+          ip_address?: string | null
+          is_active?: boolean | null
+          last_error?: string | null
+          last_error_at?: string | null
+          last_heartbeat_at?: string | null
+          last_sync_at?: string | null
+          location?: string | null
+          location_bn?: string | null
+          port?: number | null
+          school_id?: string | null
+          status?: string | null
+          sync_interval_minutes?: number | null
+          total_synced_records?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_classes?: string[] | null
+          assigned_sections?: string[] | null
+          auth_key?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          device_id?: string
+          device_name?: string
+          device_name_bn?: string | null
+          device_type?: string | null
+          error_count?: number | null
+          firmware_version?: string | null
+          id?: string
+          ip_address?: string | null
+          is_active?: boolean | null
+          last_error?: string | null
+          last_error_at?: string | null
+          last_heartbeat_at?: string | null
+          last_sync_at?: string | null
+          location?: string | null
+          location_bn?: string | null
+          port?: number | null
+          school_id?: string | null
+          status?: string | null
+          sync_interval_minutes?: number | null
+          total_synced_records?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "biometric_devices_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      device_sync_logs: {
+        Row: {
+          created_at: string | null
+          device_id: string
+          error_details: Json | null
+          error_message: string | null
+          id: string
+          initiated_by: string | null
+          records_failed: number | null
+          records_fetched: number | null
+          records_processed: number | null
+          sync_completed_at: string | null
+          sync_started_at: string | null
+          sync_status: string
+          sync_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          device_id: string
+          error_details?: Json | null
+          error_message?: string | null
+          id?: string
+          initiated_by?: string | null
+          records_failed?: number | null
+          records_fetched?: number | null
+          records_processed?: number | null
+          sync_completed_at?: string | null
+          sync_started_at?: string | null
+          sync_status: string
+          sync_type: string
+        }
+        Update: {
+          created_at?: string | null
+          device_id?: string
+          error_details?: Json | null
+          error_message?: string | null
+          id?: string
+          initiated_by?: string | null
+          records_failed?: number | null
+          records_fetched?: number | null
+          records_processed?: number | null
+          sync_completed_at?: string | null
+          sync_started_at?: string | null
+          sync_status?: string
+          sync_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_sync_logs_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "biometric_devices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       exam_papers: {
         Row: {
@@ -1176,6 +1390,63 @@ export type Database = {
           updated_at?: string | null
           updated_by?: string | null
           value?: Json
+        }
+        Relationships: []
+      }
+      teacher_attendance: {
+        Row: {
+          approval_status: string | null
+          biometric_timestamp: string | null
+          check_in_time: string | null
+          check_out_time: string | null
+          created_at: string | null
+          date: string
+          device_id: string | null
+          id: string
+          is_late: boolean | null
+          late_minutes: number | null
+          marked_by: string | null
+          remarks: string | null
+          source: string | null
+          status: string
+          teacher_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          approval_status?: string | null
+          biometric_timestamp?: string | null
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string | null
+          date: string
+          device_id?: string | null
+          id?: string
+          is_late?: boolean | null
+          late_minutes?: number | null
+          marked_by?: string | null
+          remarks?: string | null
+          source?: string | null
+          status?: string
+          teacher_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          approval_status?: string | null
+          biometric_timestamp?: string | null
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string | null
+          date?: string
+          device_id?: string | null
+          id?: string
+          is_late?: boolean | null
+          late_minutes?: number | null
+          marked_by?: string | null
+          remarks?: string | null
+          source?: string | null
+          status?: string
+          teacher_id?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
