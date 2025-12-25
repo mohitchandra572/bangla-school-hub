@@ -52,6 +52,151 @@ export type Database = {
           },
         ]
       }
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          entity_id: string | null
+          entity_type: string
+          id: string
+          ip_address: string | null
+          new_values: Json | null
+          old_values: Json | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      exam_papers: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          duration_minutes: number | null
+          exam_id: string | null
+          id: string
+          instructions: string | null
+          instructions_bn: string | null
+          status: string | null
+          subject: string
+          subject_bn: string | null
+          title: string
+          title_bn: string | null
+          total_marks: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          duration_minutes?: number | null
+          exam_id?: string | null
+          id?: string
+          instructions?: string | null
+          instructions_bn?: string | null
+          status?: string | null
+          subject: string
+          subject_bn?: string | null
+          title: string
+          title_bn?: string | null
+          total_marks?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          duration_minutes?: number | null
+          exam_id?: string | null
+          id?: string
+          instructions?: string | null
+          instructions_bn?: string | null
+          status?: string | null
+          subject?: string
+          subject_bn?: string | null
+          title?: string
+          title_bn?: string | null
+          total_marks?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_papers_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exam_questions: {
+        Row: {
+          correct_answer: string | null
+          created_at: string | null
+          id: string
+          marks: number
+          options: Json | null
+          order_index: number | null
+          paper_id: string | null
+          question_text: string
+          question_text_bn: string | null
+          question_type: string
+        }
+        Insert: {
+          correct_answer?: string | null
+          created_at?: string | null
+          id?: string
+          marks?: number
+          options?: Json | null
+          order_index?: number | null
+          paper_id?: string | null
+          question_text: string
+          question_text_bn?: string | null
+          question_type: string
+        }
+        Update: {
+          correct_answer?: string | null
+          created_at?: string | null
+          id?: string
+          marks?: number
+          options?: Json | null
+          order_index?: number | null
+          paper_id?: string | null
+          question_text?: string
+          question_text_bn?: string | null
+          question_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_questions_paper_id_fkey"
+            columns: ["paper_id"]
+            isOneToOne: false
+            referencedRelation: "exam_papers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exams: {
         Row: {
           academic_year: string | null
@@ -91,6 +236,89 @@ export type Database = {
           start_date?: string
           status?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      fee_receipts: {
+        Row: {
+          amount_paid: number
+          created_at: string | null
+          fee_id: string | null
+          id: string
+          payment_date: string | null
+          payment_method: string | null
+          receipt_number: string
+          received_by: string | null
+          remarks: string | null
+        }
+        Insert: {
+          amount_paid: number
+          created_at?: string | null
+          fee_id?: string | null
+          id?: string
+          payment_date?: string | null
+          payment_method?: string | null
+          receipt_number: string
+          received_by?: string | null
+          remarks?: string | null
+        }
+        Update: {
+          amount_paid?: number
+          created_at?: string | null
+          fee_id?: string | null
+          id?: string
+          payment_date?: string | null
+          payment_method?: string | null
+          receipt_number?: string
+          received_by?: string | null
+          remarks?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fee_receipts_fee_id_fkey"
+            columns: ["fee_id"]
+            isOneToOne: false
+            referencedRelation: "fees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fee_structures: {
+        Row: {
+          academic_year: string | null
+          amount: number
+          class: string | null
+          created_at: string | null
+          fee_type: string
+          id: string
+          is_active: boolean | null
+          name: string
+          name_bn: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          academic_year?: string | null
+          amount: number
+          class?: string | null
+          created_at?: string | null
+          fee_type: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          name_bn?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          academic_year?: string | null
+          amount?: number
+          class?: string | null
+          created_at?: string | null
+          fee_type?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          name_bn?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -255,6 +483,48 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          action_url: string | null
+          category: string | null
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          message_bn: string | null
+          title: string
+          title_bn: string | null
+          type: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_url?: string | null
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          message_bn?: string | null
+          title: string
+          title_bn?: string | null
+          type?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_url?: string | null
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          message_bn?: string | null
+          title?: string
+          title_bn?: string | null
+          type?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -402,6 +672,33 @@ export type Database = {
           status?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      system_settings: {
+        Row: {
+          category: string | null
+          id: string
+          key: string
+          updated_at: string | null
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          category?: string | null
+          id?: string
+          key: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value: Json
+        }
+        Update: {
+          category?: string | null
+          id?: string
+          key?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value?: Json
         }
         Relationships: []
       }
