@@ -511,10 +511,13 @@ export default function FeeStructureManagement() {
                 </div>
                 <div>
                   <Label className="font-bangla">শ্রেণী</Label>
-                  <Select value={structureForm.class} onValueChange={(v) => setStructureForm({ ...structureForm, class: v })}>
+                  <Select
+                    value={structureForm.class || 'all'}
+                    onValueChange={(v) => setStructureForm({ ...structureForm, class: v === 'all' ? '' : v })}
+                  >
                     <SelectTrigger><SelectValue placeholder="সকল শ্রেণী" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">সকল শ্রেণী</SelectItem>
+                      <SelectItem value="all">সকল শ্রেণী</SelectItem>
                       {classes.map((c) => (
                         <SelectItem key={c} value={c}>{c}</SelectItem>
                       ))}
