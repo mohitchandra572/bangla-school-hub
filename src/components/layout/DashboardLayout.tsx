@@ -28,7 +28,7 @@ const menuItems = {
     { icon: Settings, label: 'সিস্টেম সেটিংস', href: '/dashboard/system-settings' },
   ],
   school_admin: [
-    { icon: LayoutDashboard, label: 'ড্যাশবোর্ড', href: '/dashboard' },
+    { icon: LayoutDashboard, label: 'ড্যাশবোর্ড', href: '/dashboard/school-admin' },
     { icon: Users, label: 'শিক্ষার্থী', href: '/dashboard/students' },
     { icon: UserCheck, label: 'শিক্ষক', href: '/dashboard/teachers' },
     { icon: BookOpen, label: 'ক্লাস ও সেকশন', href: '/dashboard/classes' },
