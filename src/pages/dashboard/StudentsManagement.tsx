@@ -5,17 +5,16 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Plus, Search, Edit, Trash2, Download, Filter, Users, Key, Copy, AlertTriangle } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Download, Users, Key, Copy, AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import StudentForm, { StudentFormData, initialStudentFormData } from '@/components/forms/StudentForm';
 
-const classes = ['১ম', '২য়', '৩য়', '৪র্থ', '৫ম', '৬ষ্ঠ', '৭ম', '৮ম', '৯ম', '১০ম'];
-const sections = ['ক', 'খ', 'গ', 'ঘ'];
+const classes = ['প্লে', 'নার্সারী', 'কেজি', '১ম', '২য়', '৩য়', '৪র্থ', '৫ম', '৬ষ্ঠ', '৭ম', '৮ম', '৯ম', '১০ম', 'একাদশ', 'দ্বাদশ'];
 
 interface GeneratedCredentials {
   email: string;
@@ -45,23 +44,7 @@ export default function StudentsManagement() {
   } | null>(null);
   const [creatingAccount, setCreatingAccount] = useState(false);
 
-  const [formData, setFormData] = useState({
-    roll_number: '',
-    full_name: '',
-    full_name_bn: '',
-    class: '',
-    section: '',
-    date_of_birth: '',
-    gender: '',
-    phone: '',
-    email: '',
-    address: '',
-    // Parent info
-    parent_name: '',
-    parent_email: '',
-    parent_phone: '',
-    create_accounts: true,
-  });
+  const [formData, setFormData] = useState<StudentFormData>(initialStudentFormData);
 
   // Get user's school
   const { data: userSchool } = useQuery({
@@ -122,8 +105,9 @@ export default function StudentsManagement() {
 
   // Create student mutation
   const createMutation = useMutation({
-    mutationFn: async (data: typeof formData) => {
+    mutationFn: async (data: StudentFormData) => {
       const { data: result, error } = await supabase.from('students').insert([{
+        admission_id: data.admission_id || null,
         roll_number: data.roll_number,
         full_name: data.full_name,
         full_name_bn: data.full_name_bn || null,
@@ -131,9 +115,33 @@ export default function StudentsManagement() {
         section: data.section || null,
         date_of_birth: data.date_of_birth || null,
         gender: data.gender || null,
+        blood_group: data.blood_group || null,
+        religion: data.religion || null,
+        nationality: data.nationality || null,
+        birth_certificate_no: data.birth_certificate_no || null,
+        academic_year: data.academic_year || null,
+        group_stream: data.group_stream || null,
+        shift: data.shift || null,
+        version: data.version || null,
+        previous_school: data.previous_school || null,
+        father_name: data.father_name || null,
+        father_name_bn: data.father_name_bn || null,
+        mother_name: data.mother_name || null,
+        mother_name_bn: data.mother_name_bn || null,
+        guardian_name: data.guardian_name || null,
+        guardian_name_bn: data.guardian_name_bn || null,
+        guardian_relation: data.guardian_relation || null,
+        guardian_mobile: data.guardian_mobile || null,
+        alternative_contact: data.alternative_contact || null,
+        guardian_occupation: data.guardian_occupation || null,
+        present_address: data.present_address || null,
+        present_district: data.present_district || null,
+        present_upazila: data.present_upazila || null,
+        permanent_address: data.permanent_address || null,
+        permanent_district: data.permanent_district || null,
+        permanent_upazila: data.permanent_upazila || null,
         phone: data.phone || null,
         email: data.email || null,
-        address: data.address || null,
         school_id: userSchool?.school_id,
       }]).select().single();
       
@@ -240,11 +248,7 @@ export default function StudentsManagement() {
   });
 
   const resetForm = () => {
-    setFormData({
-      roll_number: '', full_name: '', full_name_bn: '', class: '', section: '',
-      date_of_birth: '', gender: '', phone: '', email: '', address: '',
-      parent_name: '', parent_email: '', parent_phone: '', create_accounts: true,
-    });
+    setFormData(initialStudentFormData);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
