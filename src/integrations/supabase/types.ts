@@ -807,64 +807,142 @@ export type Database = {
       }
       students: {
         Row: {
+          academic_year: string | null
           address: string | null
           admission_date: string | null
+          admission_id: string | null
+          alternative_contact: string | null
+          birth_certificate_no: string | null
+          blood_group: string | null
           class: string
           created_at: string
           date_of_birth: string | null
           email: string | null
+          father_name: string | null
+          father_name_bn: string | null
           full_name: string
           full_name_bn: string | null
           gender: string | null
+          group_stream: string | null
+          guardian_mobile: string | null
+          guardian_name: string | null
+          guardian_name_bn: string | null
+          guardian_occupation: string | null
+          guardian_relation: string | null
           id: string
+          mother_name: string | null
+          mother_name_bn: string | null
+          nationality: string | null
           parent_id: string | null
+          permanent_address: string | null
+          permanent_district: string | null
+          permanent_upazila: string | null
           phone: string | null
+          present_address: string | null
+          present_district: string | null
+          present_upazila: string | null
+          previous_school: string | null
+          religion: string | null
           roll_number: string
           school_id: string | null
           section: string | null
+          shift: string | null
           status: string | null
           updated_at: string
           user_id: string | null
+          version: string | null
         }
         Insert: {
+          academic_year?: string | null
           address?: string | null
           admission_date?: string | null
+          admission_id?: string | null
+          alternative_contact?: string | null
+          birth_certificate_no?: string | null
+          blood_group?: string | null
           class: string
           created_at?: string
           date_of_birth?: string | null
           email?: string | null
+          father_name?: string | null
+          father_name_bn?: string | null
           full_name: string
           full_name_bn?: string | null
           gender?: string | null
+          group_stream?: string | null
+          guardian_mobile?: string | null
+          guardian_name?: string | null
+          guardian_name_bn?: string | null
+          guardian_occupation?: string | null
+          guardian_relation?: string | null
           id?: string
+          mother_name?: string | null
+          mother_name_bn?: string | null
+          nationality?: string | null
           parent_id?: string | null
+          permanent_address?: string | null
+          permanent_district?: string | null
+          permanent_upazila?: string | null
           phone?: string | null
+          present_address?: string | null
+          present_district?: string | null
+          present_upazila?: string | null
+          previous_school?: string | null
+          religion?: string | null
           roll_number: string
           school_id?: string | null
           section?: string | null
+          shift?: string | null
           status?: string | null
           updated_at?: string
           user_id?: string | null
+          version?: string | null
         }
         Update: {
+          academic_year?: string | null
           address?: string | null
           admission_date?: string | null
+          admission_id?: string | null
+          alternative_contact?: string | null
+          birth_certificate_no?: string | null
+          blood_group?: string | null
           class?: string
           created_at?: string
           date_of_birth?: string | null
           email?: string | null
+          father_name?: string | null
+          father_name_bn?: string | null
           full_name?: string
           full_name_bn?: string | null
           gender?: string | null
+          group_stream?: string | null
+          guardian_mobile?: string | null
+          guardian_name?: string | null
+          guardian_name_bn?: string | null
+          guardian_occupation?: string | null
+          guardian_relation?: string | null
           id?: string
+          mother_name?: string | null
+          mother_name_bn?: string | null
+          nationality?: string | null
           parent_id?: string | null
+          permanent_address?: string | null
+          permanent_district?: string | null
+          permanent_upazila?: string | null
           phone?: string | null
+          present_address?: string | null
+          present_district?: string | null
+          present_upazila?: string | null
+          previous_school?: string | null
+          religion?: string | null
           roll_number?: string
           school_id?: string | null
           section?: string | null
+          shift?: string | null
           status?: string | null
           updated_at?: string
           user_id?: string | null
+          version?: string | null
         }
         Relationships: [
           {
@@ -948,61 +1026,109 @@ export type Database = {
       teachers: {
         Row: {
           address: string | null
+          assigned_classes: string[] | null
+          assigned_sections: string[] | null
+          bank_account: string | null
+          bank_name: string | null
+          blood_group: string | null
           created_at: string
           date_of_birth: string | null
           department: string | null
           designation: string | null
+          education_details: Json | null
           email: string | null
+          emergency_contact: string | null
+          emergency_contact_relation: string | null
           employee_id: string
+          employment_type: string | null
+          experience_years: number | null
           full_name: string
           full_name_bn: string | null
           gender: string | null
           id: string
           joining_date: string | null
+          national_id: string | null
+          nationality: string | null
           phone: string | null
           qualification: string | null
+          religion: string | null
+          salary_grade: string | null
           school_id: string | null
           status: string | null
+          subjects_taught: string[] | null
+          training_details: Json | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
           address?: string | null
+          assigned_classes?: string[] | null
+          assigned_sections?: string[] | null
+          bank_account?: string | null
+          bank_name?: string | null
+          blood_group?: string | null
           created_at?: string
           date_of_birth?: string | null
           department?: string | null
           designation?: string | null
+          education_details?: Json | null
           email?: string | null
+          emergency_contact?: string | null
+          emergency_contact_relation?: string | null
           employee_id: string
+          employment_type?: string | null
+          experience_years?: number | null
           full_name: string
           full_name_bn?: string | null
           gender?: string | null
           id?: string
           joining_date?: string | null
+          national_id?: string | null
+          nationality?: string | null
           phone?: string | null
           qualification?: string | null
+          religion?: string | null
+          salary_grade?: string | null
           school_id?: string | null
           status?: string | null
+          subjects_taught?: string[] | null
+          training_details?: Json | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
           address?: string | null
+          assigned_classes?: string[] | null
+          assigned_sections?: string[] | null
+          bank_account?: string | null
+          bank_name?: string | null
+          blood_group?: string | null
           created_at?: string
           date_of_birth?: string | null
           department?: string | null
           designation?: string | null
+          education_details?: Json | null
           email?: string | null
+          emergency_contact?: string | null
+          emergency_contact_relation?: string | null
           employee_id?: string
+          employment_type?: string | null
+          experience_years?: number | null
           full_name?: string
           full_name_bn?: string | null
           gender?: string | null
           id?: string
           joining_date?: string | null
+          national_id?: string | null
+          nationality?: string | null
           phone?: string | null
           qualification?: string | null
+          religion?: string | null
+          salary_grade?: string | null
           school_id?: string | null
           status?: string | null
+          subjects_taught?: string[] | null
+          training_details?: Json | null
           updated_at?: string
           user_id?: string | null
         }
