@@ -4,15 +4,14 @@ import { supabase } from '@/integrations/supabase/client';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from 'sonner';
-import { Plus, Edit2, Trash2, Users, UserPlus, Key, Copy, Mail, Search, Download } from 'lucide-react';
+import { Plus, Edit2, Trash2, Users, UserPlus, Key, Copy, Search, AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import TeacherForm, { TeacherFormData, initialTeacherFormData } from '@/components/forms/TeacherForm';
 
 interface Teacher {
   id: string;
@@ -36,6 +35,14 @@ interface GeneratedCredentials {
   full_name: string;
 }
 
+interface SubscriptionLimit {
+  allowed: boolean;
+  current: number;
+  max: number;
+  features: Record<string, boolean>;
+  plan: string;
+}
+
 export default function TeachersManagement() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -45,17 +52,7 @@ export default function TeachersManagement() {
   const [credentials, setCredentials] = useState<GeneratedCredentials | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [creatingAccount, setCreatingAccount] = useState(false);
-  const [formData, setFormData] = useState({
-    full_name: '',
-    full_name_bn: '',
-    employee_id: '',
-    email: '',
-    phone: '',
-    department: '',
-    designation: '',
-    gender: '',
-    create_account: true,
-  });
+  const [formData, setFormData] = useState<TeacherFormData>(initialTeacherFormData);
 
   // Get user's school
   const { data: userSchool } = useQuery({
@@ -72,6 +69,23 @@ export default function TeachersManagement() {
       return data;
     },
     enabled: !!user?.id,
+  });
+
+  // Check subscription limits
+  const { data: subscriptionLimit } = useQuery({
+    queryKey: ['subscription-limit-teacher', userSchool?.school_id],
+    queryFn: async () => {
+      if (!userSchool?.school_id) return null;
+      const { data, error } = await supabase
+        .rpc('check_school_limit', { 
+          _school_id: userSchool.school_id, 
+          _entity_type: 'teacher' 
+        });
+      
+      if (error) return null;
+      return data as unknown as SubscriptionLimit;
+    },
+    enabled: !!userSchool?.school_id,
   });
 
   // Fetch teachers
@@ -96,18 +110,37 @@ export default function TeachersManagement() {
 
   // Create teacher mutation
   const createTeacher = useMutation({
-    mutationFn: async (data: typeof formData) => {
+    mutationFn: async (data: TeacherFormData) => {
       const { data: result, error } = await supabase
         .from('teachers')
         .insert([{
+          employee_id: data.employee_id,
           full_name: data.full_name,
           full_name_bn: data.full_name_bn || null,
-          employee_id: data.employee_id,
-          email: data.email || null,
-          phone: data.phone || null,
-          department: data.department || null,
-          designation: data.designation || null,
+          date_of_birth: data.date_of_birth || null,
           gender: data.gender || null,
+          blood_group: data.blood_group || null,
+          religion: data.religion || null,
+          nationality: data.nationality || null,
+          national_id: data.national_id || null,
+          designation: data.designation || null,
+          department: data.department || null,
+          subjects_taught: data.subjects_taught.length > 0 ? data.subjects_taught : null,
+          assigned_classes: data.assigned_classes.length > 0 ? data.assigned_classes : null,
+          assigned_sections: data.assigned_sections.length > 0 ? data.assigned_sections : null,
+          education_details: data.education_details,
+          training_details: data.training_details,
+          experience_years: data.experience_years || 0,
+          phone: data.phone || null,
+          email: data.email || null,
+          address: data.address || null,
+          emergency_contact: data.emergency_contact || null,
+          emergency_contact_relation: data.emergency_contact_relation || null,
+          joining_date: data.joining_date || null,
+          employment_type: data.employment_type || 'permanent',
+          salary_grade: data.salary_grade || null,
+          bank_account: data.bank_account || null,
+          bank_name: data.bank_name || null,
           school_id: userSchool?.school_id,
         }])
         .select()
@@ -118,6 +151,7 @@ export default function TeachersManagement() {
     },
     onSuccess: async (teacher) => {
       queryClient.invalidateQueries({ queryKey: ['teachers'] });
+      queryClient.invalidateQueries({ queryKey: ['subscription-limit-teacher'] });
       
       // Auto-create account if requested
       if (formData.create_account && formData.email && userSchool?.school_id) {
@@ -134,13 +168,11 @@ export default function TeachersManagement() {
   });
 
   // Create user account for teacher
-  const createUserAccount = async (teacher: Teacher) => {
+  const createUserAccount = async (teacher: any) => {
     if (!teacher.email || !userSchool?.school_id) return;
     
     setCreatingAccount(true);
     try {
-      const { data: session } = await supabase.auth.getSession();
-      
       const response = await supabase.functions.invoke('create-user-account', {
         body: {
           entity_type: 'teacher',
@@ -175,10 +207,38 @@ export default function TeachersManagement() {
 
   // Update teacher mutation
   const updateTeacher = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: Partial<Teacher> }) => {
+    mutationFn: async ({ id, data }: { id: string; data: Partial<TeacherFormData> }) => {
       const { error } = await supabase
         .from('teachers')
-        .update(data)
+        .update({
+          employee_id: data.employee_id,
+          full_name: data.full_name,
+          full_name_bn: data.full_name_bn || null,
+          date_of_birth: data.date_of_birth || null,
+          gender: data.gender || null,
+          blood_group: data.blood_group || null,
+          religion: data.religion || null,
+          nationality: data.nationality || null,
+          national_id: data.national_id || null,
+          designation: data.designation || null,
+          department: data.department || null,
+          subjects_taught: data.subjects_taught && data.subjects_taught.length > 0 ? data.subjects_taught : null,
+          assigned_classes: data.assigned_classes && data.assigned_classes.length > 0 ? data.assigned_classes : null,
+          assigned_sections: data.assigned_sections && data.assigned_sections.length > 0 ? data.assigned_sections : null,
+          education_details: data.education_details,
+          training_details: data.training_details,
+          experience_years: data.experience_years || 0,
+          phone: data.phone || null,
+          email: data.email || null,
+          address: data.address || null,
+          emergency_contact: data.emergency_contact || null,
+          emergency_contact_relation: data.emergency_contact_relation || null,
+          joining_date: data.joining_date || null,
+          employment_type: data.employment_type || 'permanent',
+          salary_grade: data.salary_grade || null,
+          bank_account: data.bank_account || null,
+          bank_name: data.bank_name || null,
+        })
         .eq('id', id);
       
       if (error) throw error;
@@ -204,35 +264,46 @@ export default function TeachersManagement() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['teachers'] });
+      queryClient.invalidateQueries({ queryKey: ['subscription-limit-teacher'] });
       toast.success('শিক্ষক মুছে ফেলা হয়েছে');
     },
   });
 
   const resetForm = () => {
-    setFormData({
-      full_name: '',
-      full_name_bn: '',
-      employee_id: '',
-      email: '',
-      phone: '',
-      department: '',
-      designation: '',
-      gender: '',
-      create_account: true,
-    });
+    setFormData(initialTeacherFormData);
   };
 
-  const handleEdit = (teacher: Teacher) => {
+  const handleEdit = (teacher: any) => {
     setEditingTeacher(teacher);
     setFormData({
-      full_name: teacher.full_name,
+      ...initialTeacherFormData,
+      employee_id: teacher.employee_id || '',
+      full_name: teacher.full_name || '',
       full_name_bn: teacher.full_name_bn || '',
-      employee_id: teacher.employee_id,
-      email: teacher.email || '',
-      phone: teacher.phone || '',
-      department: teacher.department || '',
-      designation: teacher.designation || '',
+      date_of_birth: teacher.date_of_birth || '',
       gender: teacher.gender || '',
+      blood_group: teacher.blood_group || '',
+      religion: teacher.religion || '',
+      nationality: teacher.nationality || 'বাংলাদেশী',
+      national_id: teacher.national_id || '',
+      designation: teacher.designation || '',
+      department: teacher.department || '',
+      subjects_taught: teacher.subjects_taught || [],
+      assigned_classes: teacher.assigned_classes || [],
+      assigned_sections: teacher.assigned_sections || [],
+      education_details: teacher.education_details || [{ degree: '', institution: '', year: '' }],
+      training_details: teacher.training_details || [],
+      experience_years: teacher.experience_years || 0,
+      phone: teacher.phone || '',
+      email: teacher.email || '',
+      address: teacher.address || '',
+      emergency_contact: teacher.emergency_contact || '',
+      emergency_contact_relation: teacher.emergency_contact_relation || '',
+      joining_date: teacher.joining_date || '',
+      employment_type: teacher.employment_type || 'permanent',
+      salary_grade: teacher.salary_grade || '',
+      bank_account: teacher.bank_account || '',
+      bank_name: teacher.bank_name || '',
       create_account: false,
     });
     setIsDialogOpen(true);
@@ -240,20 +311,15 @@ export default function TeachersManagement() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check subscription limit before creating
+    if (!editingTeacher && subscriptionLimit && !subscriptionLimit.allowed) {
+      toast.error(`সাবস্ক্রিপশন লিমিট অতিক্রম করেছে। বর্তমান: ${subscriptionLimit.current}/${subscriptionLimit.max}`);
+      return;
+    }
+    
     if (editingTeacher) {
-      updateTeacher.mutate({ 
-        id: editingTeacher.id, 
-        data: {
-          full_name: formData.full_name,
-          full_name_bn: formData.full_name_bn || null,
-          employee_id: formData.employee_id,
-          email: formData.email || null,
-          phone: formData.phone || null,
-          department: formData.department || null,
-          designation: formData.designation || null,
-          gender: formData.gender || null,
-        }
-      });
+      updateTeacher.mutate({ id: editingTeacher.id, data: formData });
     } else {
       createTeacher.mutate(formData);
     }
@@ -276,14 +342,56 @@ export default function TeachersManagement() {
     withAccount: teachers?.filter(t => t.user_id).length || 0,
   };
 
+  const limitReached = subscriptionLimit && !subscriptionLimit.allowed;
+  const limitWarning = subscriptionLimit && subscriptionLimit.max > 0 && 
+    (subscriptionLimit.current / subscriptionLimit.max) >= 0.9;
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        {/* Subscription Limit Warning */}
+        {limitReached && (
+          <Card className="bg-red-50 border-red-200">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="w-6 h-6 text-red-500" />
+                <div>
+                  <p className="font-medium text-red-800 font-bangla">সাবস্ক্রিপশন লিমিট অতিক্রম!</p>
+                  <p className="text-sm text-red-600 font-bangla">
+                    আপনার প্ল্যানে সর্বোচ্চ {subscriptionLimit?.max} জন শিক্ষক যুক্ত করা যায়। 
+                    আপগ্রেড করতে সুপার অ্যাডমিনের সাথে যোগাযোগ করুন।
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {limitWarning && !limitReached && (
+          <Card className="bg-amber-50 border-amber-200">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="w-6 h-6 text-amber-500" />
+                <p className="text-sm text-amber-800 font-bangla">
+                  সতর্কতা: আপনার শিক্ষক লিমিট প্রায় শেষ ({subscriptionLimit?.current}/{subscriptionLimit?.max})
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h1 className="text-2xl font-bold font-bangla">শিক্ষক ম্যানেজমেন্ট</h1>
-            <p className="text-muted-foreground font-bangla">শিক্ষক তথ্য ও অ্যাকাউন্ট পরিচালনা</p>
+            <p className="text-muted-foreground font-bangla">
+              শিক্ষক তথ্য ও অ্যাকাউন্ট পরিচালনা
+              {subscriptionLimit && subscriptionLimit.max > 0 && (
+                <span className="ml-2">
+                  ({subscriptionLimit.current}/{subscriptionLimit.max})
+                </span>
+              )}
+            </p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
             setIsDialogOpen(open);
@@ -293,117 +401,29 @@ export default function TeachersManagement() {
             }
           }}>
             <DialogTrigger asChild>
-              <Button className="font-bangla">
+              <Button className="font-bangla" disabled={limitReached}>
                 <Plus className="w-4 h-4 mr-2" />
                 নতুন শিক্ষক
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="font-bangla">
                   {editingTeacher ? 'শিক্ষক সম্পাদনা' : 'নতুন শিক্ষক যুক্ত করুন'}
                 </DialogTitle>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="font-bangla">নাম (English)</Label>
-                    <Input
-                      value={formData.full_name}
-                      onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="font-bangla">নাম (বাংলা)</Label>
-                    <Input
-                      value={formData.full_name_bn}
-                      onChange={(e) => setFormData({ ...formData, full_name_bn: e.target.value })}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="font-bangla">কর্মচারী আইডি</Label>
-                    <Input
-                      value={formData.employee_id}
-                      onChange={(e) => setFormData({ ...formData, employee_id: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="font-bangla">ইমেইল</Label>
-                    <Input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="font-bangla">ফোন</Label>
-                    <Input
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="font-bangla">লিঙ্গ</Label>
-                    <Select
-                      value={formData.gender}
-                      onValueChange={(value) => setFormData({ ...formData, gender: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="নির্বাচন করুন" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="male">পুরুষ</SelectItem>
-                        <SelectItem value="female">মহিলা</SelectItem>
-                        <SelectItem value="other">অন্যান্য</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="font-bangla">বিভাগ</Label>
-                    <Input
-                      value={formData.department}
-                      onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                      placeholder="যেমন: বাংলা, গণিত"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="font-bangla">পদবী</Label>
-                    <Input
-                      value={formData.designation}
-                      onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                      placeholder="যেমন: সহকারী শিক্ষক"
-                    />
-                  </div>
-                </div>
-                
-                {!editingTeacher && formData.email && (
-                  <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-                    <input
-                      type="checkbox"
-                      id="create_account"
-                      checked={formData.create_account}
-                      onChange={(e) => setFormData({ ...formData, create_account: e.target.checked })}
-                      className="rounded"
-                    />
-                    <label htmlFor="create_account" className="text-sm font-bangla">
-                      স্বয়ংক্রিয়ভাবে লগইন অ্যাকাউন্ট তৈরি করুন
-                    </label>
-                  </div>
-                )}
-
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <TeacherForm 
+                  formData={formData} 
+                  onChange={setFormData} 
+                  isEditing={!!editingTeacher} 
+                />
                 <DialogFooter>
-                  <Button type="submit" disabled={createTeacher.isPending || creatingAccount}>
-                    <span className="font-bangla">
-                      {creatingAccount ? 'অ্যাকাউন্ট তৈরি হচ্ছে...' : editingTeacher ? 'আপডেট করুন' : 'যুক্ত করুন'}
-                    </span>
+                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} className="font-bangla">
+                    বাতিল
+                  </Button>
+                  <Button type="submit" disabled={createTeacher.isPending || creatingAccount} className="font-bangla">
+                    {creatingAccount ? 'অ্যাকাউন্ট তৈরি হচ্ছে...' : editingTeacher ? 'আপডেট করুন' : 'যুক্ত করুন'}
                   </Button>
                 </DialogFooter>
               </form>
@@ -462,21 +482,23 @@ export default function TeachersManagement() {
               placeholder="শিক্ষক খুঁজুন..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 font-bangla"
+              className="pl-10 font-bangla"
             />
           </div>
         </div>
 
         {/* Teachers Table */}
         <Card>
-          <CardContent className="p-0">
+          <CardContent className="pt-6">
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="font-bangla">কর্মচারী আইডি</TableHead>
                   <TableHead className="font-bangla">নাম</TableHead>
-                  <TableHead className="font-bangla">আইডি</TableHead>
                   <TableHead className="font-bangla">বিভাগ</TableHead>
-                  <TableHead className="font-bangla">যোগাযোগ</TableHead>
+                  <TableHead className="font-bangla">পদবী</TableHead>
+                  <TableHead className="font-bangla">ফোন</TableHead>
+                  <TableHead className="font-bangla">স্ট্যাটাস</TableHead>
                   <TableHead className="font-bangla">অ্যাকাউন্ট</TableHead>
                   <TableHead className="font-bangla text-right">অ্যাকশন</TableHead>
                 </TableRow>
@@ -484,19 +506,16 @@ export default function TeachersManagement() {
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8">
-                      <span className="font-bangla">লোড হচ্ছে...</span>
-                    </TableCell>
+                    <TableCell colSpan={8} className="text-center font-bangla">লোড হচ্ছে...</TableCell>
                   </TableRow>
                 ) : filteredTeachers?.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8">
-                      <span className="font-bangla">কোনো শিক্ষক পাওয়া যায়নি</span>
-                    </TableCell>
+                    <TableCell colSpan={8} className="text-center font-bangla">কোনো শিক্ষক পাওয়া যায়নি</TableCell>
                   </TableRow>
                 ) : (
                   filteredTeachers?.map((teacher) => (
                     <TableRow key={teacher.id}>
+                      <TableCell className="font-mono text-sm">{teacher.employee_id}</TableCell>
                       <TableCell>
                         <div>
                           <p className="font-medium">{teacher.full_name}</p>
@@ -505,45 +524,29 @@ export default function TeachersManagement() {
                           )}
                         </div>
                       </TableCell>
+                      <TableCell className="font-bangla">{teacher.department || '-'}</TableCell>
+                      <TableCell className="font-bangla">{teacher.designation || '-'}</TableCell>
+                      <TableCell>{teacher.phone || '-'}</TableCell>
                       <TableCell>
-                        <code className="text-sm bg-muted px-2 py-1 rounded">{teacher.employee_id}</code>
+                        <Badge variant={teacher.status === 'active' ? 'default' : 'secondary'} className="font-bangla">
+                          {teacher.status === 'active' ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
+                        </Badge>
                       </TableCell>
                       <TableCell>
-                        <span className="font-bangla">{teacher.department || '-'}</span>
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          {teacher.email && <p>{teacher.email}</p>}
-                          {teacher.phone && <p className="text-muted-foreground">{teacher.phone}</p>}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {teacher.user_id ? (
-                          <Badge variant="default" className="bg-green-500 font-bangla">সক্রিয়</Badge>
-                        ) : teacher.email ? (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => createUserAccount(teacher)}
-                            disabled={creatingAccount}
-                          >
-                            <Key className="w-3 h-3 mr-1" />
-                            <span className="font-bangla">তৈরি করুন</span>
-                          </Button>
-                        ) : (
-                          <Badge variant="secondary" className="font-bangla">ইমেইল নেই</Badge>
-                        )}
+                        <Badge variant={teacher.user_id ? 'default' : 'outline'} className="font-bangla">
+                          {teacher.user_id ? 'আছে' : 'নেই'}
+                        </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button variant="ghost" size="icon" onClick={() => handleEdit(teacher)}>
                             <Edit2 className="w-4 h-4" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
                             onClick={() => {
-                              if (confirm('আপনি কি নিশ্চিত?')) {
+                              if (confirm('আপনি কি নিশ্চিত যে আপনি এই শিক্ষককে মুছে ফেলতে চান?')) {
                                 deleteTeacher.mutate(teacher.id);
                               }
                             }}
@@ -562,47 +565,39 @@ export default function TeachersManagement() {
 
         {/* Credentials Dialog */}
         <Dialog open={isCredentialDialogOpen} onOpenChange={setIsCredentialDialogOpen}>
-          <DialogContent className="max-w-md">
+          <DialogContent>
             <DialogHeader>
-              <DialogTitle className="font-bangla">লগইন তথ্য তৈরি হয়েছে</DialogTitle>
+              <DialogTitle className="font-bangla">লগইন তথ্য</DialogTitle>
             </DialogHeader>
-            {credentials && (
-              <div className="space-y-4">
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs text-muted-foreground font-bangla">নাম</p>
-                      <p className="font-medium">{credentials.full_name}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground font-bangla">
+                নিচের তথ্য শিক্ষককে প্রদান করুন। এই তথ্য একবার দেখানো হবে।
+              </p>
+              {credentials && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
                     <div>
                       <p className="text-xs text-muted-foreground font-bangla">ইমেইল</p>
-                      <p className="font-medium">{credentials.email}</p>
+                      <p className="font-mono">{credentials.email}</p>
                     </div>
-                    <Button size="icon" variant="ghost" onClick={() => copyToClipboard(credentials.email)}>
+                    <Button variant="ghost" size="icon" onClick={() => copyToClipboard(credentials.email)}>
                       <Copy className="w-4 h-4" />
                     </Button>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
                     <div>
                       <p className="text-xs text-muted-foreground font-bangla">পাসওয়ার্ড</p>
-                      <p className="font-mono text-lg">{credentials.password}</p>
+                      <p className="font-mono">{credentials.password}</p>
                     </div>
-                    <Button size="icon" variant="ghost" onClick={() => copyToClipboard(credentials.password)}>
+                    <Button variant="ghost" size="icon" onClick={() => copyToClipboard(credentials.password)}>
                       <Copy className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground font-bangla">
-                  এই তথ্যগুলো নিরাপদে সংরক্ষণ করুন। প্রথম লগইনের পর পাসওয়ার্ড পরিবর্তন করতে বলুন।
-                </p>
-              </div>
-            )}
+              )}
+            </div>
             <DialogFooter>
-              <Button onClick={() => setIsCredentialDialogOpen(false)}>
-                <span className="font-bangla">বন্ধ করুন</span>
-              </Button>
+              <Button onClick={() => setIsCredentialDialogOpen(false)} className="font-bangla">বন্ধ করুন</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
