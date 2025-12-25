@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Plus, Search, Edit, Trash2, Download, Users, Key, Copy, AlertTriangle } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Download, Users, Key, Copy, AlertTriangle, Filter } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import StudentForm, { StudentFormData, initialStudentFormData } from '@/components/forms/StudentForm';
 
@@ -179,10 +179,10 @@ export default function StudentsManagement() {
           school_id: userSchool.school_id,
           email: formData.email,
           full_name: formData.full_name,
-          phone: formData.phone,
+          phone: formData.phone || formData.guardian_mobile,
           parent_email: formData.parent_email || undefined,
-          parent_name: formData.parent_name || undefined,
-          parent_phone: formData.parent_phone || undefined,
+          parent_name: formData.guardian_name || formData.father_name || undefined,
+          parent_phone: formData.guardian_mobile || undefined,
         },
       });
 
@@ -264,6 +264,7 @@ export default function StudentsManagement() {
       updateMutation.mutate({ 
         id: editingStudent.id, 
         data: {
+          admission_id: formData.admission_id || null,
           roll_number: formData.roll_number,
           full_name: formData.full_name,
           full_name_bn: formData.full_name_bn || null,
@@ -271,9 +272,33 @@ export default function StudentsManagement() {
           section: formData.section || null,
           date_of_birth: formData.date_of_birth || null,
           gender: formData.gender || null,
+          blood_group: formData.blood_group || null,
+          religion: formData.religion || null,
+          nationality: formData.nationality || null,
+          birth_certificate_no: formData.birth_certificate_no || null,
+          academic_year: formData.academic_year || null,
+          group_stream: formData.group_stream || null,
+          shift: formData.shift || null,
+          version: formData.version || null,
+          previous_school: formData.previous_school || null,
+          father_name: formData.father_name || null,
+          father_name_bn: formData.father_name_bn || null,
+          mother_name: formData.mother_name || null,
+          mother_name_bn: formData.mother_name_bn || null,
+          guardian_name: formData.guardian_name || null,
+          guardian_name_bn: formData.guardian_name_bn || null,
+          guardian_relation: formData.guardian_relation || null,
+          guardian_mobile: formData.guardian_mobile || null,
+          alternative_contact: formData.alternative_contact || null,
+          guardian_occupation: formData.guardian_occupation || null,
+          present_address: formData.present_address || null,
+          present_district: formData.present_district || null,
+          present_upazila: formData.present_upazila || null,
+          permanent_address: formData.permanent_address || null,
+          permanent_district: formData.permanent_district || null,
+          permanent_upazila: formData.permanent_upazila || null,
           phone: formData.phone || null,
           email: formData.email || null,
-          address: formData.address || null,
         }
       });
     } else {
@@ -284,19 +309,43 @@ export default function StudentsManagement() {
   const handleEdit = (student: any) => {
     setEditingStudent(student);
     setFormData({
+      ...initialStudentFormData,
+      admission_id: student.admission_id || '',
       roll_number: student.roll_number || '',
       full_name: student.full_name || '',
       full_name_bn: student.full_name_bn || '',
-      class: student.class || '',
-      section: student.section || '',
       date_of_birth: student.date_of_birth || '',
       gender: student.gender || '',
+      blood_group: student.blood_group || '',
+      religion: student.religion || '',
+      nationality: student.nationality || 'বাংলাদেশী',
+      birth_certificate_no: student.birth_certificate_no || '',
+      class: student.class || '',
+      section: student.section || '',
+      academic_year: student.academic_year || '',
+      group_stream: student.group_stream || '',
+      shift: student.shift || '',
+      version: student.version || 'বাংলা',
+      previous_school: student.previous_school || '',
+      father_name: student.father_name || '',
+      father_name_bn: student.father_name_bn || '',
+      mother_name: student.mother_name || '',
+      mother_name_bn: student.mother_name_bn || '',
+      guardian_name: student.guardian_name || '',
+      guardian_name_bn: student.guardian_name_bn || '',
+      guardian_relation: student.guardian_relation || '',
+      guardian_mobile: student.guardian_mobile || '',
+      alternative_contact: student.alternative_contact || '',
+      guardian_occupation: student.guardian_occupation || '',
+      present_address: student.present_address || '',
+      present_district: student.present_district || '',
+      present_upazila: student.present_upazila || '',
+      permanent_address: student.permanent_address || '',
+      permanent_district: student.permanent_district || '',
+      permanent_upazila: student.permanent_upazila || '',
       phone: student.phone || '',
       email: student.email || '',
-      address: student.address || '',
-      parent_name: '',
       parent_email: '',
-      parent_phone: '',
       create_accounts: false,
     });
     setIsOpen(true);
@@ -384,150 +433,18 @@ export default function StudentsManagement() {
                   <Plus className="w-4 h-4 mr-2" /> নতুন শিক্ষার্থী
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="font-bangla">
                     {editingStudent ? 'শিক্ষার্থীর তথ্য সম্পাদনা' : 'নতুন শিক্ষার্থী যোগ করুন'}
                   </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Student Info */}
-                  <div className="space-y-4">
-                    <h3 className="font-semibold font-bangla border-b pb-2">শিক্ষার্থীর তথ্য</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="font-bangla">রোল নম্বর *</Label>
-                        <Input 
-                          value={formData.roll_number} 
-                          onChange={(e) => setFormData({ ...formData, roll_number: e.target.value })} 
-                          required 
-                        />
-                      </div>
-                      <div>
-                        <Label className="font-bangla">নাম (ইংরেজি) *</Label>
-                        <Input 
-                          value={formData.full_name} 
-                          onChange={(e) => setFormData({ ...formData, full_name: e.target.value })} 
-                          required 
-                        />
-                      </div>
-                      <div>
-                        <Label className="font-bangla">নাম (বাংলা)</Label>
-                        <Input 
-                          value={formData.full_name_bn} 
-                          onChange={(e) => setFormData({ ...formData, full_name_bn: e.target.value })} 
-                          className="font-bangla" 
-                        />
-                      </div>
-                      <div>
-                        <Label className="font-bangla">ক্লাস *</Label>
-                        <Select value={formData.class} onValueChange={(v) => setFormData({ ...formData, class: v })}>
-                          <SelectTrigger><SelectValue placeholder="ক্লাস নির্বাচন" /></SelectTrigger>
-                          <SelectContent>
-                            {classes.map(c => <SelectItem key={c} value={c}>{c} শ্রেণী</SelectItem>)}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label className="font-bangla">সেকশন</Label>
-                        <Select value={formData.section} onValueChange={(v) => setFormData({ ...formData, section: v })}>
-                          <SelectTrigger><SelectValue placeholder="সেকশন নির্বাচন" /></SelectTrigger>
-                          <SelectContent>
-                            {sections.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label className="font-bangla">জন্ম তারিখ</Label>
-                        <Input 
-                          type="date" 
-                          value={formData.date_of_birth} 
-                          onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })} 
-                        />
-                      </div>
-                      <div>
-                        <Label className="font-bangla">লিঙ্গ</Label>
-                        <Select value={formData.gender} onValueChange={(v) => setFormData({ ...formData, gender: v })}>
-                          <SelectTrigger><SelectValue placeholder="নির্বাচন করুন" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="male">পুরুষ</SelectItem>
-                            <SelectItem value="female">মহিলা</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label className="font-bangla">ফোন</Label>
-                        <Input 
-                          value={formData.phone} 
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
-                        />
-                      </div>
-                      <div>
-                        <Label className="font-bangla">ইমেইল (শিক্ষার্থীর)</Label>
-                        <Input 
-                          type="email" 
-                          value={formData.email} 
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <Label className="font-bangla">ঠিকানা</Label>
-                        <Input 
-                          value={formData.address} 
-                          onChange={(e) => setFormData({ ...formData, address: e.target.value })} 
-                          className="font-bangla" 
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Parent Info - Only for new students */}
-                  {!editingStudent && (
-                    <div className="space-y-4">
-                      <h3 className="font-semibold font-bangla border-b pb-2">অভিভাবকের তথ্য</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="font-bangla">অভিভাবকের নাম</Label>
-                          <Input 
-                            value={formData.parent_name} 
-                            onChange={(e) => setFormData({ ...formData, parent_name: e.target.value })} 
-                          />
-                        </div>
-                        <div>
-                          <Label className="font-bangla">অভিভাবকের ইমেইল</Label>
-                          <Input 
-                            type="email" 
-                            value={formData.parent_email} 
-                            onChange={(e) => setFormData({ ...formData, parent_email: e.target.value })} 
-                          />
-                        </div>
-                        <div>
-                          <Label className="font-bangla">অভিভাবকের ফোন</Label>
-                          <Input 
-                            value={formData.parent_phone} 
-                            onChange={(e) => setFormData({ ...formData, parent_phone: e.target.value })} 
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Auto-create accounts checkbox */}
-                  {!editingStudent && (formData.email || formData.parent_email) && (
-                    <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-                      <input
-                        type="checkbox"
-                        id="create_accounts"
-                        checked={formData.create_accounts}
-                        onChange={(e) => setFormData({ ...formData, create_accounts: e.target.checked })}
-                        className="rounded"
-                      />
-                      <label htmlFor="create_accounts" className="text-sm font-bangla">
-                        স্বয়ংক্রিয়ভাবে লগইন অ্যাকাউন্ট তৈরি করুন (শিক্ষার্থী ও অভিভাবক)
-                      </label>
-                    </div>
-                  )}
-
+                  <StudentForm 
+                    formData={formData} 
+                    onChange={setFormData} 
+                    isEditing={!!editingStudent} 
+                  />
                   <DialogFooter>
                     <Button 
                       type="button" 
