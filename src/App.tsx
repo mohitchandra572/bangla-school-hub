@@ -16,6 +16,10 @@ import Dashboard from "./pages/Dashboard";
 import StudentsManagement from "./pages/dashboard/StudentsManagement";
 import AttendanceManagement from "./pages/dashboard/AttendanceManagement";
 import MessagesPage from "./pages/dashboard/MessagesPage";
+import SchoolsManagement from "./pages/dashboard/SchoolsManagement";
+import SubscriptionPlans from "./pages/dashboard/SubscriptionPlans";
+import TeachersManagement from "./pages/dashboard/TeachersManagement";
+import ParentsManagement from "./pages/dashboard/ParentsManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +48,10 @@ const App = () => (
             <Route path="/dashboard/students/new" element={<StudentsManagement />} />
             <Route path="/dashboard/attendance" element={<AttendanceManagement />} />
             <Route path="/dashboard/messages" element={<MessagesPage />} />
+            <Route path="/dashboard/schools" element={<SchoolsManagement />} />
+            <Route path="/dashboard/plans" element={<SubscriptionPlans />} />
+            <Route path="/dashboard/teachers" element={<TeachersManagement />} />
+            <Route path="/dashboard/parents" element={<ParentsManagement />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>

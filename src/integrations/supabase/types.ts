@@ -408,6 +408,45 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_credentials: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          entity_id: string
+          entity_type: string
+          first_login_at: string | null
+          id: string
+          sent_at: string | null
+          sent_via: string | null
+          temporary_password: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          entity_id: string
+          entity_type: string
+          first_login_at?: string | null
+          id?: string
+          sent_at?: string | null
+          sent_via?: string | null
+          temporary_password?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          entity_id?: string
+          entity_type?: string
+          first_login_at?: string | null
+          id?: string
+          sent_at?: string | null
+          sent_via?: string | null
+          temporary_password?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
@@ -615,6 +654,104 @@ export type Database = {
           },
         ]
       }
+      school_users: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_admin: boolean | null
+          school_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_admin?: boolean | null
+          school_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_admin?: boolean | null
+          school_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_users_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      schools: {
+        Row: {
+          address: string | null
+          code: string
+          created_at: string | null
+          created_by: string | null
+          email: string | null
+          id: string
+          is_active: boolean | null
+          is_suspended: boolean | null
+          logo_url: string | null
+          name: string
+          name_bn: string | null
+          phone: string | null
+          subscription_end: string | null
+          subscription_plan:
+            | Database["public"]["Enums"]["subscription_plan"]
+            | null
+          subscription_start: string | null
+          suspension_reason: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          code: string
+          created_at?: string | null
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_suspended?: boolean | null
+          logo_url?: string | null
+          name: string
+          name_bn?: string | null
+          phone?: string | null
+          subscription_end?: string | null
+          subscription_plan?:
+            | Database["public"]["Enums"]["subscription_plan"]
+            | null
+          subscription_start?: string | null
+          suspension_reason?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          code?: string
+          created_at?: string | null
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_suspended?: boolean | null
+          logo_url?: string | null
+          name?: string
+          name_bn?: string | null
+          phone?: string | null
+          subscription_end?: string | null
+          subscription_plan?:
+            | Database["public"]["Enums"]["subscription_plan"]
+            | null
+          subscription_start?: string | null
+          suspension_reason?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       students: {
         Row: {
           address: string | null
@@ -630,6 +767,7 @@ export type Database = {
           parent_id: string | null
           phone: string | null
           roll_number: string
+          school_id: string | null
           section: string | null
           status: string | null
           updated_at: string
@@ -649,6 +787,7 @@ export type Database = {
           parent_id?: string | null
           phone?: string | null
           roll_number: string
+          school_id?: string | null
           section?: string | null
           status?: string | null
           updated_at?: string
@@ -668,10 +807,61 @@ export type Database = {
           parent_id?: string | null
           phone?: string | null
           roll_number?: string
+          school_id?: string | null
           section?: string | null
           status?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "students_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscription_plans: {
+        Row: {
+          created_at: string | null
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          max_storage_mb: number | null
+          max_students: number
+          max_teachers: number
+          name: Database["public"]["Enums"]["subscription_plan"]
+          name_bn: string | null
+          price_monthly: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          max_storage_mb?: number | null
+          max_students: number
+          max_teachers: number
+          name: Database["public"]["Enums"]["subscription_plan"]
+          name_bn?: string | null
+          price_monthly?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          max_storage_mb?: number | null
+          max_students?: number
+          max_teachers?: number
+          name?: Database["public"]["Enums"]["subscription_plan"]
+          name_bn?: string | null
+          price_monthly?: number | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -718,6 +908,7 @@ export type Database = {
           joining_date: string | null
           phone: string | null
           qualification: string | null
+          school_id: string | null
           status: string | null
           updated_at: string
           user_id: string | null
@@ -737,6 +928,7 @@ export type Database = {
           joining_date?: string | null
           phone?: string | null
           qualification?: string | null
+          school_id?: string | null
           status?: string | null
           updated_at?: string
           user_id?: string | null
@@ -756,11 +948,20 @@ export type Database = {
           joining_date?: string | null
           phone?: string | null
           qualification?: string | null
+          school_id?: string | null
           status?: string | null
           updated_at?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "teachers_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -788,6 +989,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_school_limit: {
+        Args: { _entity_type: string; _school_id: string }
+        Returns: Json
+      }
+      get_user_school_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -804,6 +1010,7 @@ export type Database = {
         | "teacher"
         | "parent"
         | "student"
+      subscription_plan: "basic" | "standard" | "premium" | "enterprise"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -932,6 +1139,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["super_admin", "school_admin", "teacher", "parent", "student"],
+      subscription_plan: ["basic", "standard", "premium", "enterprise"],
     },
   },
 } as const
