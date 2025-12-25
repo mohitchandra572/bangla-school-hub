@@ -1,61 +1,61 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Users, Award, Clock } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { PublicLayout } from '@/components/layout/PublicLayout';
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowRight, BookOpen, Users, Award, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { PublicLayout } from "@/components/layout/PublicLayout";
 
 const stats = [
-  { icon: Users, value: '২৫০০+', label: 'শিক্ষার্থী', labelEn: 'Students' },
-  { icon: BookOpen, value: '১২০+', label: 'শিক্ষক', labelEn: 'Teachers' },
-  { icon: Award, value: '৯৫%', label: 'সাফল্যের হার', labelEn: 'Success Rate' },
-  { icon: Clock, value: '৫০+', label: 'বছরের অভিজ্ঞতা', labelEn: 'Years' },
+  { icon: Users, value: "২৫০০+", label: "শিক্ষার্থী", labelEn: "Students" },
+  { icon: BookOpen, value: "১২০+", label: "শিক্ষক", labelEn: "Teachers" },
+  { icon: Award, value: "৯৫%", label: "সাফল্যের হার", labelEn: "Success Rate" },
+  { icon: Clock, value: "৫০+", label: "বছরের অভিজ্ঞতা", labelEn: "Years" },
 ];
 
 const features = [
   {
-    title: 'মানসম্মত শিক্ষা',
-    titleEn: 'Quality Education',
-    description: 'অভিজ্ঞ শিক্ষকমণ্ডলী দ্বারা আধুনিক পাঠ্যক্রম অনুসরণ করে শিক্ষাদান',
-    icon: '📚',
+    title: "মানসম্মত শিক্ষা",
+    titleEn: "Quality Education",
+    description: "অভিজ্ঞ শিক্ষকমণ্ডলী দ্বারা আধুনিক পাঠ্যক্রম অনুসরণ করে শিক্ষাদান",
+    icon: "📚",
   },
   {
-    title: 'ডিজিটাল ক্লাসরুম',
-    titleEn: 'Digital Classroom',
-    description: 'প্রযুক্তি নির্ভর শিক্ষা ব্যবস্থা ও স্মার্ট ক্লাসরুম সুবিধা',
-    icon: '💻',
+    title: "ডিজিটাল ক্লাসরুম",
+    titleEn: "Digital Classroom",
+    description: "প্রযুক্তি নির্ভর শিক্ষা ব্যবস্থা ও স্মার্ট ক্লাসরুম সুবিধা",
+    icon: "💻",
   },
   {
-    title: 'সহ-পাঠ্যক্রমিক কার্যক্রম',
-    titleEn: 'Co-curricular Activities',
-    description: 'খেলাধুলা, সাংস্কৃতিক কার্যক্রম ও বিভিন্ন ক্লাব সুবিধা',
-    icon: '🎨',
+    title: "সহ-পাঠ্যক্রমিক কার্যক্রম",
+    titleEn: "Co-curricular Activities",
+    description: "খেলাধুলা, সাংস্কৃতিক কার্যক্রম ও বিভিন্ন ক্লাব সুবিধা",
+    icon: "🎨",
   },
   {
-    title: 'নিরাপদ পরিবেশ',
-    titleEn: 'Safe Environment',
-    description: 'সিসিটিভি নজরদারি ও সুরক্ষিত ক্যাম্পাস পরিবেশ',
-    icon: '🛡️',
+    title: "নিরাপদ পরিবেশ",
+    titleEn: "Safe Environment",
+    description: "সিসিটিভি নজরদারি ও সুরক্ষিত ক্যাম্পাস পরিবেশ",
+    icon: "🛡️",
   },
 ];
 
 const notices = [
   {
     id: 1,
-    title: 'বার্ষিক পরীক্ষার সময়সূচী প্রকাশ',
-    date: '২৫ ডিসেম্বর, ২০২৫',
-    category: 'পরীক্ষা',
+    title: "বার্ষিক পরীক্ষার সময়সূচী প্রকাশ",
+    date: "২৫ ডিসেম্বর, ২০২৫",
+    category: "পরীক্ষা",
   },
   {
     id: 2,
-    title: 'শীতকালীন ছুটির নোটিশ',
-    date: '২০ ডিসেম্বর, ২০২৫',
-    category: 'ছুটি',
+    title: "শীতকালীন ছুটির নোটিশ",
+    date: "২০ ডিসেম্বর, ২০২৫",
+    category: "ছুটি",
   },
   {
     id: 3,
-    title: 'বার্ষিক ক্রীড়া প্রতিযোগিতা',
-    date: '১৫ ডিসেম্বর, ২০২৫',
-    category: 'অনুষ্ঠান',
+    title: "বার্ষিক ক্রীড়া প্রতিযোগিতা",
+    date: "১৫ ডিসেম্বর, ২০২৫",
+    category: "অনুষ্ঠান",
   },
 ];
 
@@ -65,7 +65,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center hero-gradient overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
-        
+
         <div className="container relative z-10 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -78,16 +78,17 @@ const Index = () => {
                 <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
                 <span className="font-bangla">ভর্তি চলছে ২০২৬</span>
               </div>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight font-bangla">
                 স্বপ্নের পথে
                 <span className="block text-gradient">এগিয়ে যাও</span>
               </h1>
-              
+
               <p className="text-lg md:text-xl text-primary-foreground/80 max-w-xl font-bangla">
-                মানসম্মত শিক্ষা, নৈতিক মূল্যবোধ ও আধুনিক প্রযুক্তির সমন্বয়ে গড়ে তুলছি আগামীর প্রজন্ম। আমাদের সাথে শুরু করুন আপনার সন্তানের সাফল্যের যাত্রা।
+                মানসম্মত শিক্ষা, নৈতিক মূল্যবোধ ও আধুনিক প্রযুক্তির সমন্বয়ে গড়ে তুলছি আগামীর প্রজন্ম। আমাদের সাথে শুরু
+                করুন আপনার সন্তানের সাফল্যের যাত্রা।
               </p>
-              
+
               <div className="flex flex-wrap gap-4">
                 <Link to="/admission">
                   <Button size="lg" className="btn-accent font-bangla text-lg px-8 group">
@@ -96,7 +97,7 @@ const Index = () => {
                   </Button>
                 </Link>
                 <Link to="/about">
-                  <Button size="lg" variant="outline" className="btn-outline-light font-bangla text-lg px-8">
+                  <Button size="lg" variant="outline" className="btn-outline-light text-black font-bangla text-lg px-8">
                     আরও জানুন
                   </Button>
                 </Link>
@@ -117,7 +118,10 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-                <div className="absolute top-10 -left-10 bg-card rounded-2xl p-4 shadow-elevated animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                <div
+                  className="absolute top-10 -left-10 bg-card rounded-2xl p-4 shadow-elevated animate-fade-in"
+                  style={{ animationDelay: "0.4s" }}
+                >
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center">
                       <Award className="w-6 h-6 text-secondary" />
@@ -128,7 +132,10 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-                <div className="absolute bottom-10 -right-10 bg-card rounded-2xl p-4 shadow-elevated animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                <div
+                  className="absolute bottom-10 -right-10 bg-card rounded-2xl p-4 shadow-elevated animate-fade-in"
+                  style={{ animationDelay: "0.6s" }}
+                >
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center">
                       <Users className="w-6 h-6 text-accent" />
@@ -147,7 +154,10 @@ const Index = () => {
         {/* Wave SVG */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="hsl(var(--background))"/>
+            <path
+              d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
+              fill="hsl(var(--background))"
+            />
           </svg>
         </div>
       </section>
@@ -212,15 +222,9 @@ const Index = () => {
       <section className="py-20">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <h2 className="section-title">সাম্প্রতিক নোটিশ</h2>
-              <p className="section-subtitle">
-                সর্বশেষ ঘোষণা ও গুরুত্বপূর্ণ তথ্য
-              </p>
+              <p className="section-subtitle">সর্বশেষ ঘোষণা ও গুরুত্বপূর্ণ তথ্য</p>
 
               <div className="space-y-4">
                 {notices.map((notice, index) => (
@@ -246,7 +250,10 @@ const Index = () => {
                 ))}
               </div>
 
-              <Link to="/notices" className="inline-flex items-center gap-2 text-accent hover:gap-3 transition-all mt-6 font-bangla">
+              <Link
+                to="/notices"
+                className="inline-flex items-center gap-2 text-accent hover:gap-3 transition-all mt-6 font-bangla"
+              >
                 সব নোটিশ দেখুন
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -260,9 +267,10 @@ const Index = () => {
             >
               <h3 className="text-2xl font-bold mb-4 font-bangla">ভর্তি তথ্য ২০২৬</h3>
               <p className="text-primary-foreground/80 mb-6 font-bangla">
-                নতুন শিক্ষাবর্ষের জন্য ভর্তি কার্যক্রম চলছে। এখনই আবেদন করুন এবং আপনার সন্তানের উজ্জ্বল ভবিষ্যত নিশ্চিত করুন।
+                নতুন শিক্ষাবর্ষের জন্য ভর্তি কার্যক্রম চলছে। এখনই আবেদন করুন এবং আপনার সন্তানের উজ্জ্বল ভবিষ্যত নিশ্চিত
+                করুন।
               </p>
-              
+
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center gap-3 font-bangla">
                   <span className="w-2 h-2 bg-accent rounded-full" />
