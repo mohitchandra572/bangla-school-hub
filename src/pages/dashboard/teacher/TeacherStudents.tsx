@@ -125,23 +125,29 @@ export default function TeacherStudents() {
                   className="pl-10 font-bangla"
                 />
               </div>
-              <Select value={selectedClass} onValueChange={setSelectedClass}>
+              <Select
+                value={selectedClass || 'all'}
+                onValueChange={(val) => setSelectedClass(val === 'all' ? '' : val)}
+              >
                 <SelectTrigger className="font-bangla">
                   <SelectValue placeholder="শ্রেণি নির্বাচন" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">সকল শ্রেণি</SelectItem>
+                  <SelectItem value="all">সকল শ্রেণি</SelectItem>
                   {classes.map((cls: string) => (
                     <SelectItem key={cls} value={cls}>{cls} শ্রেণি</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <Select value={selectedSection} onValueChange={setSelectedSection}>
+              <Select
+                value={selectedSection || 'all'}
+                onValueChange={(val) => setSelectedSection(val === 'all' ? '' : val)}
+              >
                 <SelectTrigger className="font-bangla">
                   <SelectValue placeholder="শাখা নির্বাচন" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">সকল শাখা</SelectItem>
+                  <SelectItem value="all">সকল শাখা</SelectItem>
                   {sections.map((sec: string) => (
                     <SelectItem key={sec} value={sec}>{sec} শাখা</SelectItem>
                   ))}
