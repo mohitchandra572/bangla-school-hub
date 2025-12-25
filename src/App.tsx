@@ -30,6 +30,9 @@ import NoticesManagement from "./pages/dashboard/NoticesManagement";
 import ExamsManagementPage from "./pages/dashboard/ExamsManagementPage";
 import FeeManagementPage from "./pages/dashboard/FeeManagementPage";
 import ReportsPage from "./pages/dashboard/ReportsPage";
+import ExamRoutineManagement from "./pages/dashboard/exams/ExamRoutineManagement";
+import AdmitCardGeneration from "./pages/dashboard/exams/AdmitCardGeneration";
+import ResultsVerification from "./pages/dashboard/exams/ResultsVerification";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -70,6 +73,9 @@ const App = () => (
             <Route path="/dashboard/classes" element={<ClassSectionManagement />} />
             <Route path="/dashboard/notices" element={<NoticesManagement />} />
             <Route path="/dashboard/exams" element={<ExamsManagementPage />} />
+            <Route path="/dashboard/exams/:examId/routine" element={<ExamRoutineManagement />} />
+            <Route path="/dashboard/exams/:examId/admit-cards" element={<AdmitCardGeneration />} />
+            <Route path="/dashboard/exams/:examId/verify" element={<ResultsVerification />} />
             <Route path="/dashboard/fees" element={<FeeManagementPage />} />
             <Route path="/dashboard/reports" element={<ReportsPage />} />
             

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -18,7 +20,8 @@ import { bn } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 import { 
   Plus, Edit, Trash2, Search, FileText, Calendar, 
-  ClipboardList, Award, Users, CheckCircle2, Clock, Play
+  ClipboardList, Award, Users, CheckCircle2, Clock, Play,
+  MoreVertical, CalendarDays, CreditCard, ClipboardCheck
 } from 'lucide-react';
 
 const classes = ['১ম', '২য়', '৩য়', '৪র্থ', '৫ম', '৬ষ্ঠ', '৭ম', '৮ম', '৯ম', '১০ম'];
@@ -46,6 +49,7 @@ const statusLabels: Record<string, string> = {
 };
 
 export default function ExamsManagementPage() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
@@ -495,21 +499,42 @@ export default function ExamsManagementPage() {
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
-                            <Button variant="ghost" size="icon" onClick={() => handleEdit(exam)}>
+                          <div className="flex justify-end gap-1">
+                            <Button variant="ghost" size="icon" onClick={() => handleEdit(exam)} title="সম্পাদনা">
                               <Edit className="w-4 h-4" />
                             </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="icon"
-                              onClick={() => {
-                                if (confirm('আপনি কি এই পরীক্ষা মুছে ফেলতে চান?')) {
-                                  deleteMutation.mutate(exam.id);
-                                }
-                              }}
-                            >
-                              <Trash2 className="w-4 h-4 text-destructive" />
-                            </Button>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <MoreVertical className="w-4 h-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => navigate(`/dashboard/exams/${exam.id}/routine`)} className="font-bangla">
+                                  <CalendarDays className="w-4 h-4 mr-2" />
+                                  রুটিন
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate(`/dashboard/exams/${exam.id}/admit-cards`)} className="font-bangla">
+                                  <CreditCard className="w-4 h-4 mr-2" />
+                                  এডমিট কার্ড
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate(`/dashboard/exams/${exam.id}/verify`)} className="font-bangla">
+                                  <ClipboardCheck className="w-4 h-4 mr-2" />
+                                  ফলাফল যাচাই
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                  onClick={() => {
+                                    if (confirm('আপনি কি এই পরীক্ষা মুছে ফেলতে চান?')) {
+                                      deleteMutation.mutate(exam.id);
+                                    }
+                                  }}
+                                  className="text-destructive font-bangla"
+                                >
+                                  <Trash2 className="w-4 h-4 mr-2" />
+                                  মুছে ফেলুন
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </div>
                         </TableCell>
                       </TableRow>
