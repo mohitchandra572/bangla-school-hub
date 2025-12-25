@@ -7,7 +7,9 @@ const corsHeaders = {
 };
 
 interface SetupAdminRequest {
-  user_id: string;
+  email: string;
+  password: string;
+  full_name: string;
   role: 'super_admin' | 'school_admin';
   school_name?: string;
   school_code?: string;
@@ -30,44 +32,56 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     const body: SetupAdminRequest = await req.json();
-    const { user_id, role, school_name, school_code } = body;
+    const { email, password, full_name, role, school_name, school_code } = body;
 
-    console.log("Setting up admin:", { user_id, role, school_name });
+    console.log("Setting up admin:", { email, role, school_name });
 
-    // Check if user exists
-    const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(user_id);
-    
-    if (userError || !userData.user) {
+    // Create user in auth.users
+    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: { full_name }
+    });
+
+    if (authError) {
+      console.error("Error creating user:", authError);
       return new Response(
-        JSON.stringify({ error: "User not found" }),
-        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: authError.message }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Check if role already assigned
-    const { data: existingRole } = await supabaseAdmin
+    const user_id = authData.user.id;
+    console.log("User created:", user_id);
+
+    // Create profile
+    const { error: profileError } = await supabaseAdmin
+      .from("profiles")
+      .upsert({
+        user_id,
+        full_name,
+        email,
+      });
+
+    if (profileError) {
+      console.error("Error creating profile:", profileError);
+    }
+
+    // Assign the role
+    const { error: roleError } = await supabaseAdmin
       .from("user_roles")
-      .select("*")
-      .eq("user_id", user_id)
-      .eq("role", role)
-      .single();
+      .insert({
+        user_id,
+        role,
+      });
 
-    if (!existingRole) {
-      // Assign the role
-      const { error: roleError } = await supabaseAdmin
-        .from("user_roles")
-        .insert({
-          user_id,
-          role,
-        });
-
-      if (roleError) {
-        console.error("Error assigning role:", roleError);
-        return new Response(
-          JSON.stringify({ error: roleError.message }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
+    if (roleError) {
+      console.error("Error assigning role:", roleError);
+      return new Response(
+        JSON.stringify({ error: roleError.message }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     let school_id = null;
@@ -115,6 +129,7 @@ const handler = async (req: Request): Promise<Response> => {
       JSON.stringify({
         success: true,
         user_id,
+        email,
         role,
         school_id,
       }),
