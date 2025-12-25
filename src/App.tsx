@@ -40,6 +40,12 @@ import ParentAttendanceHistory from "./pages/dashboard/parent/ParentAttendanceHi
 import ParentFeePortal from "./pages/dashboard/parent/ParentFeePortal";
 import AbsenceResponsesManagement from "./pages/dashboard/AbsenceResponsesManagement";
 import FeeStructureManagement from "./pages/dashboard/fees/FeeStructureManagement";
+import TeacherDashboard from "./pages/dashboard/teacher/TeacherDashboard";
+import TeacherStudents from "./pages/dashboard/teacher/TeacherStudents";
+import TeacherAttendance from "./pages/dashboard/teacher/TeacherAttendance";
+import TeacherMarksEntry from "./pages/dashboard/teacher/TeacherMarksEntry";
+import TeacherLeave from "./pages/dashboard/teacher/TeacherLeave";
+import TeacherProfile from "./pages/dashboard/teacher/TeacherProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -96,6 +102,14 @@ const App = () => (
             {/* Admin Management */}
             <Route path="/dashboard/absence-responses" element={<AbsenceResponsesManagement />} />
             <Route path="/dashboard/fee-structure" element={<FeeStructureManagement />} />
+            
+            {/* Teacher Routes */}
+            <Route path="/dashboard/teacher" element={<TeacherDashboard />} />
+            <Route path="/dashboard/teacher/my-students" element={<TeacherStudents />} />
+            <Route path="/dashboard/teacher/attendance" element={<TeacherAttendance />} />
+            <Route path="/dashboard/teacher/marks-entry" element={<TeacherMarksEntry />} />
+            <Route path="/dashboard/teacher/leave" element={<TeacherLeave />} />
+            <Route path="/dashboard/teacher/profile" element={<TeacherProfile />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
