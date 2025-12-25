@@ -27,6 +27,9 @@ import SystemSettings from "./pages/dashboard/SystemSettings";
 import BillingOverview from "./pages/dashboard/BillingOverview";
 import ClassSectionManagement from "./pages/dashboard/ClassSectionManagement";
 import NoticesManagement from "./pages/dashboard/NoticesManagement";
+import ExamsManagementPage from "./pages/dashboard/ExamsManagementPage";
+import FeeManagementPage from "./pages/dashboard/FeeManagementPage";
+import ReportsPage from "./pages/dashboard/ReportsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -66,6 +69,9 @@ const App = () => (
             <Route path="/dashboard/billing" element={<BillingOverview />} />
             <Route path="/dashboard/classes" element={<ClassSectionManagement />} />
             <Route path="/dashboard/notices" element={<NoticesManagement />} />
+            <Route path="/dashboard/exams" element={<ExamsManagementPage />} />
+            <Route path="/dashboard/fees" element={<FeeManagementPage />} />
+            <Route path="/dashboard/reports" element={<ReportsPage />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
