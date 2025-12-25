@@ -20,6 +20,8 @@ import SchoolsManagement from "./pages/dashboard/SchoolsManagement";
 import SubscriptionPlans from "./pages/dashboard/SubscriptionPlans";
 import TeachersManagement from "./pages/dashboard/TeachersManagement";
 import ParentsManagement from "./pages/dashboard/ParentsManagement";
+import EnhancedAuditLogs from "./pages/dashboard/EnhancedAuditLogs";
+import SystemSettings from "./pages/dashboard/SystemSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +54,8 @@ const App = () => (
             <Route path="/dashboard/plans" element={<SubscriptionPlans />} />
             <Route path="/dashboard/teachers" element={<TeachersManagement />} />
             <Route path="/dashboard/parents" element={<ParentsManagement />} />
+            <Route path="/dashboard/audit" element={<EnhancedAuditLogs />} />
+            <Route path="/dashboard/system-settings" element={<SystemSettings />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
