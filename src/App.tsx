@@ -46,6 +46,9 @@ import TeacherAttendance from "./pages/dashboard/teacher/TeacherAttendance";
 import TeacherMarksEntry from "./pages/dashboard/teacher/TeacherMarksEntry";
 import TeacherLeave from "./pages/dashboard/teacher/TeacherLeave";
 import TeacherProfile from "./pages/dashboard/teacher/TeacherProfile";
+import TeacherMessages from "./pages/dashboard/teacher/TeacherMessages";
+import TeacherExams from "./pages/dashboard/teacher/TeacherExams";
+import TeacherNotices from "./pages/dashboard/teacher/TeacherNotices";
 import StudentDashboard from "./pages/dashboard/student/StudentDashboard";
 import StudentProfile from "./pages/dashboard/student/StudentProfile";
 import StudentAttendance from "./pages/dashboard/student/StudentAttendance";
@@ -118,6 +121,9 @@ const App = () => (
             <Route path="/dashboard/teacher/marks-entry" element={<TeacherMarksEntry />} />
             <Route path="/dashboard/teacher/leave" element={<TeacherLeave />} />
             <Route path="/dashboard/teacher/profile" element={<TeacherProfile />} />
+            <Route path="/dashboard/teacher/messages" element={<TeacherMessages />} />
+            <Route path="/dashboard/teacher/exams" element={<TeacherExams />} />
+            <Route path="/dashboard/teacher/notices" element={<TeacherNotices />} />
             
             {/* Student Routes */}
             <Route path="/dashboard/student" element={<StudentDashboard />} />
