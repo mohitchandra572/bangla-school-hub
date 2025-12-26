@@ -60,6 +60,16 @@ const menuItems = {
     { icon: MessageSquare, label: 'মেসেজ', href: '/dashboard/messages' },
     { icon: Bell, label: 'নোটিফিকেশন', href: '/dashboard/notifications' },
   ],
+  student: [
+    { icon: LayoutDashboard, label: 'ড্যাশবোর্ড', href: '/dashboard/student' },
+    { icon: Calendar, label: 'উপস্থিতি', href: '/dashboard/student/attendance' },
+    { icon: ClipboardList, label: 'পরীক্ষার রুটিন', href: '/dashboard/student/exams' },
+    { icon: Award, label: 'ফলাফল', href: '/dashboard/student/results' },
+    { icon: FileText, label: 'প্রবেশপত্র', href: '/dashboard/student/admit-cards' },
+    { icon: CreditCard, label: 'ফি', href: '/dashboard/student/fees' },
+    { icon: Bell, label: 'নোটিশ', href: '/dashboard/student/notices' },
+    { icon: UserCheck, label: 'প্রোফাইল', href: '/dashboard/student/profile' },
+  ],
 };
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
