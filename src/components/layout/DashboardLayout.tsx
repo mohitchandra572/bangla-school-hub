@@ -5,7 +5,8 @@ import {
   GraduationCap, LayoutDashboard, Users, UserCheck, BookOpen, 
   ClipboardList, CreditCard, Bell, MessageSquare, BarChart3, 
   Settings, LogOut, ChevronLeft, ChevronRight, Home, FileText,
-  Calendar, Award, Shield, Activity, DollarSign
+  Calendar, Award, Shield, Activity, DollarSign, BookMarked, 
+  FileQuestion, Upload, Palette
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -39,6 +40,7 @@ const menuItems = {
     { icon: FileText, label: 'নোটিশ', href: '/dashboard/notices' },
     { icon: MessageSquare, label: 'মেসেজ', href: '/dashboard/messages' },
     { icon: BarChart3, label: 'রিপোর্ট', href: '/dashboard/reports' },
+    { icon: Palette, label: 'ব্র্যান্ডিং', href: '/dashboard/branding' },
     { icon: Settings, label: 'সেটিংস', href: '/dashboard/settings' },
   ],
   teacher: [
@@ -47,6 +49,9 @@ const menuItems = {
     { icon: Calendar, label: 'উপস্থিতি', href: '/dashboard/teacher/attendance' },
     { icon: ClipboardList, label: 'পরীক্ষা', href: '/dashboard/teacher/exams' },
     { icon: Award, label: 'মার্কস এন্ট্রি', href: '/dashboard/teacher/marks-entry' },
+    { icon: BookMarked, label: 'প্রশ্ন ব্যাংক', href: '/dashboard/teacher/question-bank' },
+    { icon: FileQuestion, label: 'প্রশ্নপত্র তৈরি', href: '/dashboard/teacher/question-paper' },
+    { icon: Upload, label: 'প্রশ্ন ইম্পোর্ট', href: '/dashboard/teacher/question-import' },
     { icon: MessageSquare, label: 'মেসেজ', href: '/dashboard/teacher/messages' },
     { icon: Bell, label: 'নোটিশ', href: '/dashboard/teacher/notices' },
     { icon: FileText, label: 'ছুটির আবেদন', href: '/dashboard/teacher/leave' },
