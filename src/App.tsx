@@ -46,6 +46,14 @@ import TeacherAttendance from "./pages/dashboard/teacher/TeacherAttendance";
 import TeacherMarksEntry from "./pages/dashboard/teacher/TeacherMarksEntry";
 import TeacherLeave from "./pages/dashboard/teacher/TeacherLeave";
 import TeacherProfile from "./pages/dashboard/teacher/TeacherProfile";
+import StudentDashboard from "./pages/dashboard/student/StudentDashboard";
+import StudentProfile from "./pages/dashboard/student/StudentProfile";
+import StudentAttendance from "./pages/dashboard/student/StudentAttendance";
+import StudentExams from "./pages/dashboard/student/StudentExams";
+import StudentResults from "./pages/dashboard/student/StudentResults";
+import StudentAdmitCards from "./pages/dashboard/student/StudentAdmitCards";
+import StudentFees from "./pages/dashboard/student/StudentFees";
+import StudentNotices from "./pages/dashboard/student/StudentNotices";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -110,6 +118,16 @@ const App = () => (
             <Route path="/dashboard/teacher/marks-entry" element={<TeacherMarksEntry />} />
             <Route path="/dashboard/teacher/leave" element={<TeacherLeave />} />
             <Route path="/dashboard/teacher/profile" element={<TeacherProfile />} />
+            
+            {/* Student Routes */}
+            <Route path="/dashboard/student" element={<StudentDashboard />} />
+            <Route path="/dashboard/student/profile" element={<StudentProfile />} />
+            <Route path="/dashboard/student/attendance" element={<StudentAttendance />} />
+            <Route path="/dashboard/student/exams" element={<StudentExams />} />
+            <Route path="/dashboard/student/results" element={<StudentResults />} />
+            <Route path="/dashboard/student/admit-cards" element={<StudentAdmitCards />} />
+            <Route path="/dashboard/student/fees" element={<StudentFees />} />
+            <Route path="/dashboard/student/notices" element={<StudentNotices />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
