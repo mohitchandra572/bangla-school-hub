@@ -49,6 +49,9 @@ import TeacherProfile from "./pages/dashboard/teacher/TeacherProfile";
 import TeacherMessages from "./pages/dashboard/teacher/TeacherMessages";
 import TeacherExams from "./pages/dashboard/teacher/TeacherExams";
 import TeacherNotices from "./pages/dashboard/teacher/TeacherNotices";
+import QuestionBankManagement from "./pages/dashboard/teacher/QuestionBankManagement";
+import QuestionPaperBuilder from "./pages/dashboard/teacher/QuestionPaperBuilder";
+import QuestionImport from "./pages/dashboard/teacher/QuestionImport";
 import StudentDashboard from "./pages/dashboard/student/StudentDashboard";
 import StudentProfile from "./pages/dashboard/student/StudentProfile";
 import StudentAttendance from "./pages/dashboard/student/StudentAttendance";
@@ -57,6 +60,7 @@ import StudentResults from "./pages/dashboard/student/StudentResults";
 import StudentAdmitCards from "./pages/dashboard/student/StudentAdmitCards";
 import StudentFees from "./pages/dashboard/student/StudentFees";
 import StudentNotices from "./pages/dashboard/student/StudentNotices";
+import SchoolBrandingSettings from "./pages/dashboard/admin/SchoolBrandingSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -124,6 +128,12 @@ const App = () => (
             <Route path="/dashboard/teacher/messages" element={<TeacherMessages />} />
             <Route path="/dashboard/teacher/exams" element={<TeacherExams />} />
             <Route path="/dashboard/teacher/notices" element={<TeacherNotices />} />
+            <Route path="/dashboard/teacher/question-bank" element={<QuestionBankManagement />} />
+            <Route path="/dashboard/teacher/question-paper" element={<QuestionPaperBuilder />} />
+            <Route path="/dashboard/teacher/question-import" element={<QuestionImport />} />
+            
+            {/* Admin Branding Settings */}
+            <Route path="/dashboard/branding" element={<SchoolBrandingSettings />} />
             
             {/* Student Routes */}
             <Route path="/dashboard/student" element={<StudentDashboard />} />
