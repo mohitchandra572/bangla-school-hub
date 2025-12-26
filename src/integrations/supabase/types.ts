@@ -381,6 +381,62 @@ export type Database = {
           },
         ]
       }
+      chapters: {
+        Row: {
+          chapter_name: string
+          chapter_name_bn: string
+          chapter_number: number
+          class: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          description_bn: string | null
+          id: string
+          is_active: boolean | null
+          school_id: string | null
+          subject: string
+          subject_bn: string
+        }
+        Insert: {
+          chapter_name: string
+          chapter_name_bn: string
+          chapter_number: number
+          class: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          description_bn?: string | null
+          id?: string
+          is_active?: boolean | null
+          school_id?: string | null
+          subject: string
+          subject_bn: string
+        }
+        Update: {
+          chapter_name?: string
+          chapter_name_bn?: string
+          chapter_number?: number
+          class?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          description_bn?: string | null
+          id?: string
+          is_active?: boolean | null
+          school_id?: string | null
+          subject?: string
+          subject_bn?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chapters_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       device_sync_logs: {
         Row: {
           created_at: string | null
@@ -439,13 +495,19 @@ export type Database = {
       }
       exam_papers: {
         Row: {
+          approved_at: string | null
+          approved_by: string | null
           created_at: string | null
           created_by: string | null
+          custom_footer: string | null
+          custom_header: string | null
           duration_minutes: number | null
           exam_id: string | null
+          exam_pattern: string | null
           id: string
           instructions: string | null
           instructions_bn: string | null
+          marks_distribution: Json | null
           status: string | null
           subject: string
           subject_bn: string | null
@@ -453,15 +515,22 @@ export type Database = {
           title_bn: string | null
           total_marks: number | null
           updated_at: string | null
+          use_school_branding: boolean | null
         }
         Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string | null
           created_by?: string | null
+          custom_footer?: string | null
+          custom_header?: string | null
           duration_minutes?: number | null
           exam_id?: string | null
+          exam_pattern?: string | null
           id?: string
           instructions?: string | null
           instructions_bn?: string | null
+          marks_distribution?: Json | null
           status?: string | null
           subject: string
           subject_bn?: string | null
@@ -469,15 +538,22 @@ export type Database = {
           title_bn?: string | null
           total_marks?: number | null
           updated_at?: string | null
+          use_school_branding?: boolean | null
         }
         Update: {
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string | null
           created_by?: string | null
+          custom_footer?: string | null
+          custom_header?: string | null
           duration_minutes?: number | null
           exam_id?: string | null
+          exam_pattern?: string | null
           id?: string
           instructions?: string | null
           instructions_bn?: string | null
+          marks_distribution?: Json | null
           status?: string | null
           subject?: string
           subject_bn?: string | null
@@ -485,6 +561,7 @@ export type Database = {
           title_bn?: string | null
           total_marks?: number | null
           updated_at?: string | null
+          use_school_branding?: boolean | null
         }
         Relationships: [
           {
@@ -498,8 +575,11 @@ export type Database = {
       }
       exam_questions: {
         Row: {
+          chapter_id: string | null
           correct_answer: string | null
           created_at: string | null
+          difficulty: string | null
+          difficulty_bn: string | null
           id: string
           marks: number
           options: Json | null
@@ -508,10 +588,14 @@ export type Database = {
           question_text: string
           question_text_bn: string | null
           question_type: string
+          source_question_id: string | null
         }
         Insert: {
+          chapter_id?: string | null
           correct_answer?: string | null
           created_at?: string | null
+          difficulty?: string | null
+          difficulty_bn?: string | null
           id?: string
           marks?: number
           options?: Json | null
@@ -520,10 +604,14 @@ export type Database = {
           question_text: string
           question_text_bn?: string | null
           question_type: string
+          source_question_id?: string | null
         }
         Update: {
+          chapter_id?: string | null
           correct_answer?: string | null
           created_at?: string | null
+          difficulty?: string | null
+          difficulty_bn?: string | null
           id?: string
           marks?: number
           options?: Json | null
@@ -532,13 +620,28 @@ export type Database = {
           question_text?: string
           question_text_bn?: string | null
           question_type?: string
+          source_question_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "exam_questions_chapter_id_fkey"
+            columns: ["chapter_id"]
+            isOneToOne: false
+            referencedRelation: "chapters"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "exam_questions_paper_id_fkey"
             columns: ["paper_id"]
             isOneToOne: false
             referencedRelation: "exam_papers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_questions_source_question_id_fkey"
+            columns: ["source_question_id"]
+            isOneToOne: false
+            referencedRelation: "question_bank"
             referencedColumns: ["id"]
           },
         ]
@@ -1513,6 +1616,149 @@ export type Database = {
         }
         Relationships: []
       }
+      question_bank: {
+        Row: {
+          chapter_id: string | null
+          class: string
+          correct_answer: string | null
+          created_at: string | null
+          created_by: string | null
+          difficulty: string
+          difficulty_bn: string | null
+          id: string
+          is_active: boolean | null
+          marks: number
+          options: Json | null
+          question_text: string
+          question_text_bn: string
+          question_type: string
+          school_id: string | null
+          subject: string
+          subject_bn: string
+          tags: string[] | null
+          updated_at: string | null
+          usage_count: number | null
+        }
+        Insert: {
+          chapter_id?: string | null
+          class: string
+          correct_answer?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          difficulty?: string
+          difficulty_bn?: string | null
+          id?: string
+          is_active?: boolean | null
+          marks?: number
+          options?: Json | null
+          question_text: string
+          question_text_bn: string
+          question_type?: string
+          school_id?: string | null
+          subject: string
+          subject_bn: string
+          tags?: string[] | null
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Update: {
+          chapter_id?: string | null
+          class?: string
+          correct_answer?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          difficulty?: string
+          difficulty_bn?: string | null
+          id?: string
+          is_active?: boolean | null
+          marks?: number
+          options?: Json | null
+          question_text?: string
+          question_text_bn?: string
+          question_type?: string
+          school_id?: string | null
+          subject?: string
+          subject_bn?: string
+          tags?: string[] | null
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_bank_chapter_id_fkey"
+            columns: ["chapter_id"]
+            isOneToOne: false
+            referencedRelation: "chapters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_bank_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      question_import_history: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          created_by: string | null
+          error_log: Json | null
+          failed_questions: number | null
+          file_name: string
+          file_url: string | null
+          id: string
+          import_type: string
+          imported_questions: number | null
+          language: string | null
+          school_id: string | null
+          status: string | null
+          total_questions: number | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          error_log?: Json | null
+          failed_questions?: number | null
+          file_name: string
+          file_url?: string | null
+          id?: string
+          import_type?: string
+          imported_questions?: number | null
+          language?: string | null
+          school_id?: string | null
+          status?: string | null
+          total_questions?: number | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          error_log?: Json | null
+          failed_questions?: number | null
+          file_name?: string
+          file_url?: string | null
+          id?: string
+          import_type?: string
+          imported_questions?: number | null
+          language?: string | null
+          school_id?: string | null
+          status?: string | null
+          total_questions?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_import_history_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       results: {
         Row: {
           created_at: string
@@ -1572,6 +1818,71 @@ export type Database = {
             columns: ["student_id"]
             isOneToOne: false
             referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      school_branding: {
+        Row: {
+          created_at: string | null
+          footer_text: string | null
+          footer_text_bn: string | null
+          header_text: string | null
+          header_text_bn: string | null
+          id: string
+          logo_position: string | null
+          paper_margin_bottom: number | null
+          paper_margin_left: number | null
+          paper_margin_right: number | null
+          paper_margin_top: number | null
+          school_id: string | null
+          show_logo: boolean | null
+          updated_at: string | null
+          watermark_text: string | null
+          watermark_text_bn: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          footer_text?: string | null
+          footer_text_bn?: string | null
+          header_text?: string | null
+          header_text_bn?: string | null
+          id?: string
+          logo_position?: string | null
+          paper_margin_bottom?: number | null
+          paper_margin_left?: number | null
+          paper_margin_right?: number | null
+          paper_margin_top?: number | null
+          school_id?: string | null
+          show_logo?: boolean | null
+          updated_at?: string | null
+          watermark_text?: string | null
+          watermark_text_bn?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          footer_text?: string | null
+          footer_text_bn?: string | null
+          header_text?: string | null
+          header_text_bn?: string | null
+          id?: string
+          logo_position?: string | null
+          paper_margin_bottom?: number | null
+          paper_margin_left?: number | null
+          paper_margin_right?: number | null
+          paper_margin_top?: number | null
+          school_id?: string | null
+          show_logo?: boolean | null
+          updated_at?: string | null
+          watermark_text?: string | null
+          watermark_text_bn?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_branding_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: true
+            referencedRelation: "schools"
             referencedColumns: ["id"]
           },
         ]
