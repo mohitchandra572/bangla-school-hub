@@ -6,7 +6,7 @@ import {
   ClipboardList, CreditCard, Bell, MessageSquare, BarChart3, 
   Settings, LogOut, ChevronLeft, ChevronRight, Home, FileText,
   Calendar, Award, Shield, Activity, DollarSign, BookMarked, 
-  FileQuestion, Upload, Palette
+  FileQuestion, Upload, Palette, Layout
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -51,6 +51,7 @@ const menuItems = {
     { icon: Award, label: 'মার্কস এন্ট্রি', href: '/dashboard/teacher/marks-entry' },
     { icon: BookMarked, label: 'প্রশ্ন ব্যাংক', href: '/dashboard/teacher/question-bank' },
     { icon: FileQuestion, label: 'প্রশ্নপত্র তৈরি', href: '/dashboard/teacher/question-paper' },
+    { icon: Layout, label: 'টেমপ্লেট', href: '/dashboard/teacher/question-templates' },
     { icon: Upload, label: 'প্রশ্ন ইম্পোর্ট', href: '/dashboard/teacher/question-import' },
     { icon: MessageSquare, label: 'মেসেজ', href: '/dashboard/teacher/messages' },
     { icon: Bell, label: 'নোটিশ', href: '/dashboard/teacher/notices' },
