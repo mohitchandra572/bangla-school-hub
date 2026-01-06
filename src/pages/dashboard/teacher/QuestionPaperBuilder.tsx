@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, Reorder } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,10 +14,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { 
   Plus, Save, Eye, Trash2, GripVertical, FileText, Download,
   CheckCircle, HelpCircle, AlignLeft, List, BookOpen, Printer,
-  FileDown, Settings, School, Image
+  FileDown, Settings, School, Image, Layout
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -62,6 +63,7 @@ export default function QuestionPaperBuilder() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const printRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const [paper, setPaper] = useState({
     title: '',
@@ -85,6 +87,34 @@ export default function QuestionPaperBuilder() {
   const [showQuestionPicker, setShowQuestionPicker] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [pickerFilters, setPickerFilters] = useState({ type: '', difficulty: '' });
+
+  // Load template from sessionStorage if available
+  useEffect(() => {
+    const templateData = sessionStorage.getItem('paper_template');
+    if (templateData) {
+      try {
+        const template = JSON.parse(templateData);
+        const subj = subjects.find(s => s.value === template.subject);
+        setPaper(prev => ({
+          ...prev,
+          title_bn: template.title_bn || prev.title_bn,
+          title: template.title_bn || prev.title,
+          exam_pattern: template.exam_pattern || prev.exam_pattern,
+          subject: template.subject || prev.subject,
+          subject_bn: subj?.label || template.subject || prev.subject_bn,
+          class: template.class || prev.class,
+          total_marks: template.total_marks || prev.total_marks,
+          duration_minutes: template.duration_minutes || prev.duration_minutes,
+          instructions_bn: template.instructions_bn || prev.instructions_bn,
+          marks_distribution: template.marks_distribution || prev.marks_distribution,
+        }));
+        sessionStorage.removeItem('paper_template');
+        toast({ title: 'টেমপ্লেট লোড হয়েছে', description: 'এখন প্রশ্ন যোগ করুন' });
+      } catch (e) {
+        console.error('Failed to parse template:', e);
+      }
+    }
+  }, []);
 
   // Fetch school branding
   const { data: schoolBranding } = useQuery({

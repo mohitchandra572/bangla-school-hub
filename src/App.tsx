@@ -51,6 +51,7 @@ import TeacherExams from "./pages/dashboard/teacher/TeacherExams";
 import TeacherNotices from "./pages/dashboard/teacher/TeacherNotices";
 import QuestionBankManagement from "./pages/dashboard/teacher/QuestionBankManagement";
 import QuestionPaperBuilder from "./pages/dashboard/teacher/QuestionPaperBuilder";
+import QuestionPaperTemplates from "./pages/dashboard/teacher/QuestionPaperTemplates";
 import QuestionImport from "./pages/dashboard/teacher/QuestionImport";
 import StudentDashboard from "./pages/dashboard/student/StudentDashboard";
 import StudentProfile from "./pages/dashboard/student/StudentProfile";
@@ -130,6 +131,7 @@ const App = () => (
             <Route path="/dashboard/teacher/notices" element={<TeacherNotices />} />
             <Route path="/dashboard/teacher/question-bank" element={<QuestionBankManagement />} />
             <Route path="/dashboard/teacher/question-paper" element={<QuestionPaperBuilder />} />
+            <Route path="/dashboard/teacher/question-templates" element={<QuestionPaperTemplates />} />
             <Route path="/dashboard/teacher/question-import" element={<QuestionImport />} />
             
             {/* Admin Branding Settings */}

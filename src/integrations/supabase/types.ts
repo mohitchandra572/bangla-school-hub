@@ -1759,6 +1759,83 @@ export type Database = {
           },
         ]
       }
+      question_paper_templates: {
+        Row: {
+          class: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          description_bn: string | null
+          duration_minutes: number | null
+          exam_pattern: string
+          id: string
+          instructions_bn: string | null
+          is_public: boolean | null
+          is_system_template: boolean | null
+          marks_distribution: Json | null
+          name: string
+          name_bn: string
+          question_structure: Json | null
+          school_id: string | null
+          subject: string | null
+          subject_bn: string | null
+          total_marks: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          class?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          description_bn?: string | null
+          duration_minutes?: number | null
+          exam_pattern?: string
+          id?: string
+          instructions_bn?: string | null
+          is_public?: boolean | null
+          is_system_template?: boolean | null
+          marks_distribution?: Json | null
+          name: string
+          name_bn: string
+          question_structure?: Json | null
+          school_id?: string | null
+          subject?: string | null
+          subject_bn?: string | null
+          total_marks?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          class?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          description_bn?: string | null
+          duration_minutes?: number | null
+          exam_pattern?: string
+          id?: string
+          instructions_bn?: string | null
+          is_public?: boolean | null
+          is_system_template?: boolean | null
+          marks_distribution?: Json | null
+          name?: string
+          name_bn?: string
+          question_structure?: Json | null
+          school_id?: string | null
+          subject?: string | null
+          subject_bn?: string | null
+          total_marks?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_paper_templates_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       results: {
         Row: {
           created_at: string
