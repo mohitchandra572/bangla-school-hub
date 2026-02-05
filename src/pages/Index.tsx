@@ -1,17 +1,20 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, BookOpen, Users, Award, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 
-const stats = [
+// Default static data (fallback if no CMS content)
+const defaultStats = [
   { icon: Users, value: "২৫০০+", label: "শিক্ষার্থী", labelEn: "Students" },
   { icon: BookOpen, value: "১২০+", label: "শিক্ষক", labelEn: "Teachers" },
   { icon: Award, value: "৯৫%", label: "সাফল্যের হার", labelEn: "Success Rate" },
   { icon: Clock, value: "৫০+", label: "বছরের অভিজ্ঞতা", labelEn: "Years" },
 ];
 
-const features = [
+const defaultFeatures = [
   {
     title: "মানসম্মত শিক্ষা",
     titleEn: "Quality Education",
@@ -38,28 +41,88 @@ const features = [
   },
 ];
 
-const notices = [
-  {
-    id: 1,
-    title: "বার্ষিক পরীক্ষার সময়সূচী প্রকাশ",
-    date: "২৫ ডিসেম্বর, ২০২৫",
-    category: "পরীক্ষা",
-  },
-  {
-    id: 2,
-    title: "শীতকালীন ছুটির নোটিশ",
-    date: "২০ ডিসেম্বর, ২০২৫",
-    category: "ছুটি",
-  },
-  {
-    id: 3,
-    title: "বার্ষিক ক্রীড়া প্রতিযোগিতা",
-    date: "১৫ ডিসেম্বর, ২০২৫",
-    category: "অনুষ্ঠান",
-  },
-];
-
 const Index = () => {
+  // Fetch dynamic features from CMS
+  const { data: cmsFeatures } = useQuery({
+    queryKey: ['website-features-public'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('website_features')
+        .select('*')
+        .eq('is_published', true)
+        .order('display_order');
+      if (error) return null;
+      return data;
+    },
+  });
+
+  // Fetch dynamic stats from CMS
+  const { data: cmsStats } = useQuery({
+    queryKey: ['website-stats-public'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('website_stats')
+        .select('*')
+        .eq('is_published', true)
+        .order('display_order');
+      if (error) return null;
+      return data;
+    },
+  });
+
+  // Fetch hero content from CMS
+  const { data: heroContent } = useQuery({
+    queryKey: ['website-content-hero'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('website_content')
+        .select('*')
+        .eq('page', 'home')
+        .eq('section', 'hero')
+        .eq('is_published', true)
+        .single();
+      if (error) return null;
+      return data;
+    },
+  });
+
+  // Fetch notices from database
+  const { data: notices } = useQuery({
+    queryKey: ['notices-public'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('notices')
+        .select('*')
+        .eq('is_published', true)
+        .order('created_at', { ascending: false })
+        .limit(3);
+      if (error) return [];
+      return data;
+    },
+  });
+
+  // Use CMS content or fallback to defaults
+  const features = cmsFeatures && cmsFeatures.length > 0 
+    ? cmsFeatures.map(f => ({
+        title: f.title_bn || f.title,
+        titleEn: f.title,
+        description: f.description_bn || f.description,
+        icon: f.icon || "📚",
+      }))
+    : defaultFeatures;
+
+  const stats = cmsStats && cmsStats.length > 0
+    ? cmsStats.map(s => ({
+        icon: Users,
+        value: s.value,
+        label: s.label_bn || s.label,
+        labelEn: s.label,
+      }))
+    : defaultStats;
+
+  const heroTitle = heroContent?.title_bn || "স্বপ্নের পথে";
+  const heroSubtitle = heroContent?.content_bn || "মানসম্মত শিক্ষা, নৈতিক মূল্যবোধ ও আধুনিক প্রযুক্তির সমন্বয়ে গড়ে তুলছি আগামীর প্রজন্ম। আমাদের সাথে শুরু করুন আপনার সন্তানের সাফল্যের যাত্রা।";
+
   return (
     <PublicLayout>
       {/* Hero Section */}
@@ -80,13 +143,12 @@ const Index = () => {
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight font-bangla">
-                স্বপ্নের পথে
-                <span className="block text-gradient">এগিয়ে যাও</span>
+                {heroTitle.split(' ').slice(0, 2).join(' ')}
+                <span className="block text-gradient">{heroTitle.split(' ').slice(2).join(' ') || 'এগিয়ে যাও'}</span>
               </h1>
 
               <p className="text-lg md:text-xl text-primary-foreground/80 max-w-xl font-bangla">
-                মানসম্মত শিক্ষা, নৈতিক মূল্যবোধ ও আধুনিক প্রযুক্তির সমন্বয়ে গড়ে তুলছি আগামীর প্রজন্ম। আমাদের সাথে শুরু
-                করুন আপনার সন্তানের সাফল্যের যাত্রা।
+                {heroSubtitle}
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -141,8 +203,8 @@ const Index = () => {
                       <Users className="w-6 h-6 text-accent" />
                     </div>
                     <div>
-                      <p className="font-bold text-foreground font-bangla">২৫০০+</p>
-                      <p className="text-sm text-muted-foreground font-bangla">শিক্ষার্থী</p>
+                      <p className="font-bold text-foreground font-bangla">{stats[0]?.value || '২৫০০+'}</p>
+                      <p className="text-sm text-muted-foreground font-bangla">{stats[0]?.label || 'শিক্ষার্থী'}</p>
                     </div>
                   </div>
                 </div>
@@ -227,7 +289,7 @@ const Index = () => {
               <p className="section-subtitle">সর্বশেষ ঘোষণা ও গুরুত্বপূর্ণ তথ্য</p>
 
               <div className="space-y-4">
-                {notices.map((notice, index) => (
+                {(notices && notices.length > 0 ? notices : []).map((notice, index) => (
                   <motion.div
                     key={notice.id}
                     initial={{ opacity: 0, x: -20 }}
@@ -239,15 +301,20 @@ const Index = () => {
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs rounded-full mb-2 font-bangla">
-                          {notice.category}
+                          {notice.category || 'সাধারণ'}
                         </span>
-                        <h4 className="font-semibold text-foreground font-bangla">{notice.title}</h4>
-                        <p className="text-sm text-muted-foreground mt-1 font-bangla">{notice.date}</p>
+                        <h4 className="font-semibold text-foreground font-bangla">{notice.title_bn || notice.title}</h4>
+                        <p className="text-sm text-muted-foreground mt-1 font-bangla">
+                          {new Date(notice.created_at).toLocaleDateString('bn-BD')}
+                        </p>
                       </div>
                       <ArrowRight className="w-5 h-5 text-accent flex-shrink-0" />
                     </div>
                   </motion.div>
                 ))}
+                {(!notices || notices.length === 0) && (
+                  <p className="text-muted-foreground font-bangla text-center py-8">কোনো নোটিশ নেই</p>
+                )}
               </div>
 
               <Link

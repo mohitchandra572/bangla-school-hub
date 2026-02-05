@@ -66,6 +66,7 @@ import CertificateManagement from "./pages/dashboard/admin/CertificateManagement
 import CertificateGenerator from "./pages/dashboard/admin/CertificateGenerator";
 import CertificateTemplates from "./pages/dashboard/admin/CertificateTemplates";
 import StudentIdConfig from "./pages/dashboard/admin/StudentIdConfig";
+import WebsiteManagement from "./pages/dashboard/admin/WebsiteManagement";
 import CertificateVerify from "./pages/CertificateVerify";
 import NotFound from "./pages/NotFound";
 
@@ -145,6 +146,7 @@ const App = () => (
             <Route path="/dashboard/certificate-generator" element={<CertificateGenerator />} />
             <Route path="/dashboard/certificate-templates" element={<CertificateTemplates />} />
             <Route path="/dashboard/student-id-config" element={<StudentIdConfig />} />
+            <Route path="/dashboard/website" element={<WebsiteManagement />} />
             
             {/* Public Certificate Verification */}
             <Route path="/verify-certificate" element={<CertificateVerify />} />
