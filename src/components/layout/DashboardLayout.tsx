@@ -6,7 +6,7 @@ import {
   ClipboardList, CreditCard, Bell, MessageSquare, BarChart3, 
   Settings, LogOut, ChevronLeft, ChevronRight, Home, FileText,
   Calendar, Award, Shield, Activity, DollarSign, BookMarked, 
-  FileQuestion, Upload, Palette, Layout
+  FileQuestion, Upload, Palette, Layout, FileBadge, Hash
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -37,6 +37,8 @@ const menuItems = {
     { icon: ClipboardList, label: 'পরীক্ষা', href: '/dashboard/exams' },
     { icon: Award, label: 'ফলাফল', href: '/dashboard/results' },
     { icon: CreditCard, label: 'ফি ম্যানেজমেন্ট', href: '/dashboard/fees' },
+    { icon: FileBadge, label: 'সার্টিফিকেট', href: '/dashboard/certificates' },
+    { icon: Hash, label: 'স্টুডেন্ট আইডি', href: '/dashboard/student-id-config' },
     { icon: FileText, label: 'নোটিশ', href: '/dashboard/notices' },
     { icon: MessageSquare, label: 'মেসেজ', href: '/dashboard/messages' },
     { icon: BarChart3, label: 'রিপোর্ট', href: '/dashboard/reports' },

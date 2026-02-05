@@ -381,6 +381,283 @@ export type Database = {
           },
         ]
       }
+      certificate_templates: {
+        Row: {
+          certificate_type: Database["public"]["Enums"]["certificate_type"]
+          created_at: string | null
+          created_by: string | null
+          footer_text: string | null
+          footer_text_bn: string | null
+          header_text: string | null
+          header_text_bn: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          name_bn: string
+          principal_designation: string | null
+          principal_name: string | null
+          principal_name_bn: string | null
+          school_id: string | null
+          show_logo: boolean | null
+          show_principal_signature: boolean | null
+          show_stamp: boolean | null
+          template_content: string | null
+          template_content_bn: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          certificate_type: Database["public"]["Enums"]["certificate_type"]
+          created_at?: string | null
+          created_by?: string | null
+          footer_text?: string | null
+          footer_text_bn?: string | null
+          header_text?: string | null
+          header_text_bn?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          name_bn: string
+          principal_designation?: string | null
+          principal_name?: string | null
+          principal_name_bn?: string | null
+          school_id?: string | null
+          show_logo?: boolean | null
+          show_principal_signature?: boolean | null
+          show_stamp?: boolean | null
+          template_content?: string | null
+          template_content_bn?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          certificate_type?: Database["public"]["Enums"]["certificate_type"]
+          created_at?: string | null
+          created_by?: string | null
+          footer_text?: string | null
+          footer_text_bn?: string | null
+          header_text?: string | null
+          header_text_bn?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          name_bn?: string
+          principal_designation?: string | null
+          principal_name?: string | null
+          principal_name_bn?: string | null
+          school_id?: string | null
+          show_logo?: boolean | null
+          show_principal_signature?: boolean | null
+          show_stamp?: boolean | null
+          template_content?: string | null
+          template_content_bn?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificate_templates_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      certificate_verifications: {
+        Row: {
+          certificate_id: string
+          id: string
+          is_valid: boolean | null
+          verification_code: string
+          verified_at: string | null
+          verified_by_ip: string | null
+          verified_by_user_agent: string | null
+        }
+        Insert: {
+          certificate_id: string
+          id?: string
+          is_valid?: boolean | null
+          verification_code: string
+          verified_at?: string | null
+          verified_by_ip?: string | null
+          verified_by_user_agent?: string | null
+        }
+        Update: {
+          certificate_id?: string
+          id?: string
+          is_valid?: boolean | null
+          verification_code?: string
+          verified_at?: string | null
+          verified_by_ip?: string | null
+          verified_by_user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificate_verifications_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "certificates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      certificates: {
+        Row: {
+          admission_date: string | null
+          approved_at: string | null
+          approved_by: string | null
+          certificate_data: Json | null
+          certificate_number: string
+          certificate_type: Database["public"]["Enums"]["certificate_type"]
+          class: string
+          conduct: string | null
+          conduct_bn: string | null
+          created_at: string | null
+          date_of_birth: string | null
+          download_count: number | null
+          father_name: string | null
+          father_name_bn: string | null
+          id: string
+          issue_date: string | null
+          issued_at: string | null
+          issued_by: string | null
+          last_downloaded_at: string | null
+          last_exam_passed: string | null
+          last_exam_passed_bn: string | null
+          last_printed_at: string | null
+          leaving_date: string | null
+          mother_name: string | null
+          mother_name_bn: string | null
+          notes: string | null
+          notes_bn: string | null
+          printed_count: number | null
+          qr_code_data: string | null
+          reason_for_leaving: string | null
+          reason_for_leaving_bn: string | null
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
+          requested_at: string | null
+          requested_by: string | null
+          roll_number: string | null
+          school_id: string | null
+          section: string | null
+          status: Database["public"]["Enums"]["certificate_status"] | null
+          student_id: string
+          student_name: string
+          student_name_bn: string | null
+          updated_at: string | null
+          verification_code: string
+        }
+        Insert: {
+          admission_date?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          certificate_data?: Json | null
+          certificate_number: string
+          certificate_type: Database["public"]["Enums"]["certificate_type"]
+          class: string
+          conduct?: string | null
+          conduct_bn?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          download_count?: number | null
+          father_name?: string | null
+          father_name_bn?: string | null
+          id?: string
+          issue_date?: string | null
+          issued_at?: string | null
+          issued_by?: string | null
+          last_downloaded_at?: string | null
+          last_exam_passed?: string | null
+          last_exam_passed_bn?: string | null
+          last_printed_at?: string | null
+          leaving_date?: string | null
+          mother_name?: string | null
+          mother_name_bn?: string | null
+          notes?: string | null
+          notes_bn?: string | null
+          printed_count?: number | null
+          qr_code_data?: string | null
+          reason_for_leaving?: string | null
+          reason_for_leaving_bn?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          requested_at?: string | null
+          requested_by?: string | null
+          roll_number?: string | null
+          school_id?: string | null
+          section?: string | null
+          status?: Database["public"]["Enums"]["certificate_status"] | null
+          student_id: string
+          student_name: string
+          student_name_bn?: string | null
+          updated_at?: string | null
+          verification_code: string
+        }
+        Update: {
+          admission_date?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          certificate_data?: Json | null
+          certificate_number?: string
+          certificate_type?: Database["public"]["Enums"]["certificate_type"]
+          class?: string
+          conduct?: string | null
+          conduct_bn?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          download_count?: number | null
+          father_name?: string | null
+          father_name_bn?: string | null
+          id?: string
+          issue_date?: string | null
+          issued_at?: string | null
+          issued_by?: string | null
+          last_downloaded_at?: string | null
+          last_exam_passed?: string | null
+          last_exam_passed_bn?: string | null
+          last_printed_at?: string | null
+          leaving_date?: string | null
+          mother_name?: string | null
+          mother_name_bn?: string | null
+          notes?: string | null
+          notes_bn?: string | null
+          printed_count?: number | null
+          qr_code_data?: string | null
+          reason_for_leaving?: string | null
+          reason_for_leaving_bn?: string | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          requested_at?: string | null
+          requested_by?: string | null
+          roll_number?: string | null
+          school_id?: string | null
+          section?: string | null
+          status?: Database["public"]["Enums"]["certificate_status"] | null
+          student_id?: string
+          student_name?: string
+          student_name_bn?: string | null
+          updated_at?: string | null
+          verification_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificates_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chapters: {
         Row: {
           chapter_name: string
@@ -2172,6 +2449,62 @@ export type Database = {
           },
         ]
       }
+      student_id_config: {
+        Row: {
+          academic_year: string | null
+          created_at: string | null
+          current_serial: number | null
+          id: string
+          include_class_code: boolean | null
+          include_year: boolean | null
+          is_active: boolean | null
+          prefix: string | null
+          school_id: string | null
+          separator: string | null
+          serial_digits: number | null
+          updated_at: string | null
+          year_format: string | null
+        }
+        Insert: {
+          academic_year?: string | null
+          created_at?: string | null
+          current_serial?: number | null
+          id?: string
+          include_class_code?: boolean | null
+          include_year?: boolean | null
+          is_active?: boolean | null
+          prefix?: string | null
+          school_id?: string | null
+          separator?: string | null
+          serial_digits?: number | null
+          updated_at?: string | null
+          year_format?: string | null
+        }
+        Update: {
+          academic_year?: string | null
+          created_at?: string | null
+          current_serial?: number | null
+          id?: string
+          include_class_code?: boolean | null
+          include_year?: boolean | null
+          is_active?: boolean | null
+          prefix?: string | null
+          school_id?: string | null
+          separator?: string | null
+          serial_digits?: number | null
+          updated_at?: string | null
+          year_format?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_id_config_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       students: {
         Row: {
           academic_year: string | null
@@ -2603,6 +2936,18 @@ export type Database = {
         Args: { p_student_id: string }
         Returns: Json
       }
+      generate_certificate_number: {
+        Args: {
+          p_certificate_type: Database["public"]["Enums"]["certificate_type"]
+          p_school_id: string
+        }
+        Returns: string
+      }
+      generate_student_id: {
+        Args: { p_academic_year: string; p_class: string; p_school_id: string }
+        Returns: string
+      }
+      generate_verification_code: { Args: never; Returns: string }
       get_user_school_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
@@ -2624,6 +2969,19 @@ export type Database = {
         | "teacher"
         | "parent"
         | "student"
+      certificate_status:
+        | "draft"
+        | "pending_approval"
+        | "approved"
+        | "rejected"
+        | "issued"
+        | "cancelled"
+      certificate_type:
+        | "transfer_certificate"
+        | "testimonial"
+        | "character_certificate"
+        | "study_certificate"
+        | "bonafide_certificate"
       subscription_plan: "basic" | "standard" | "premium" | "enterprise"
     }
     CompositeTypes: {
@@ -2753,6 +3111,21 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["super_admin", "school_admin", "teacher", "parent", "student"],
+      certificate_status: [
+        "draft",
+        "pending_approval",
+        "approved",
+        "rejected",
+        "issued",
+        "cancelled",
+      ],
+      certificate_type: [
+        "transfer_certificate",
+        "testimonial",
+        "character_certificate",
+        "study_certificate",
+        "bonafide_certificate",
+      ],
       subscription_plan: ["basic", "standard", "premium", "enterprise"],
     },
   },
