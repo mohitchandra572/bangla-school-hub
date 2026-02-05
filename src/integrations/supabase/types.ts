@@ -2923,6 +2923,272 @@ export type Database = {
         }
         Relationships: []
       }
+      website_content: {
+        Row: {
+          content: string | null
+          content_bn: string | null
+          created_at: string | null
+          created_by: string | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          is_published: boolean | null
+          metadata: Json | null
+          page: string
+          school_id: string | null
+          section: string
+          title: string | null
+          title_bn: string | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          content?: string | null
+          content_bn?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          metadata?: Json | null
+          page: string
+          school_id?: string | null
+          section: string
+          title?: string | null
+          title_bn?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          content?: string | null
+          content_bn?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          metadata?: Json | null
+          page?: string
+          school_id?: string | null
+          section?: string
+          title?: string | null
+          title_bn?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "website_content_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      website_features: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          description_bn: string | null
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_published: boolean | null
+          school_id: string | null
+          title: string
+          title_bn: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          description_bn?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_published?: boolean | null
+          school_id?: string | null
+          title: string
+          title_bn: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          description_bn?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_published?: boolean | null
+          school_id?: string | null
+          title?: string
+          title_bn?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "website_features_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      website_settings: {
+        Row: {
+          address: string | null
+          address_bn: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          contact_phone_alt: string | null
+          copyright_text: string | null
+          copyright_text_bn: string | null
+          created_at: string | null
+          facebook_url: string | null
+          favicon_url: string | null
+          id: string
+          logo_url: string | null
+          map_embed_url: string | null
+          metadata: Json | null
+          office_hours: string | null
+          office_hours_bn: string | null
+          school_id: string | null
+          site_name: string | null
+          site_name_bn: string | null
+          tagline: string | null
+          tagline_bn: string | null
+          twitter_url: string | null
+          updated_at: string | null
+          updated_by: string | null
+          youtube_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          address_bn?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          contact_phone_alt?: string | null
+          copyright_text?: string | null
+          copyright_text_bn?: string | null
+          created_at?: string | null
+          facebook_url?: string | null
+          favicon_url?: string | null
+          id?: string
+          logo_url?: string | null
+          map_embed_url?: string | null
+          metadata?: Json | null
+          office_hours?: string | null
+          office_hours_bn?: string | null
+          school_id?: string | null
+          site_name?: string | null
+          site_name_bn?: string | null
+          tagline?: string | null
+          tagline_bn?: string | null
+          twitter_url?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+          youtube_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          address_bn?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          contact_phone_alt?: string | null
+          copyright_text?: string | null
+          copyright_text_bn?: string | null
+          created_at?: string | null
+          facebook_url?: string | null
+          favicon_url?: string | null
+          id?: string
+          logo_url?: string | null
+          map_embed_url?: string | null
+          metadata?: Json | null
+          office_hours?: string | null
+          office_hours_bn?: string | null
+          school_id?: string | null
+          site_name?: string | null
+          site_name_bn?: string | null
+          tagline?: string | null
+          tagline_bn?: string | null
+          twitter_url?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+          youtube_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "website_settings_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: true
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      website_stats: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_published: boolean | null
+          label: string
+          label_bn: string
+          school_id: string | null
+          updated_at: string | null
+          updated_by: string | null
+          value: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_published?: boolean | null
+          label: string
+          label_bn: string
+          school_id?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+          value: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_published?: boolean | null
+          label?: string
+          label_bn?: string
+          school_id?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "website_stats_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
