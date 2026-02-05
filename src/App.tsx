@@ -62,6 +62,11 @@ import StudentAdmitCards from "./pages/dashboard/student/StudentAdmitCards";
 import StudentFees from "./pages/dashboard/student/StudentFees";
 import StudentNotices from "./pages/dashboard/student/StudentNotices";
 import SchoolBrandingSettings from "./pages/dashboard/admin/SchoolBrandingSettings";
+import CertificateManagement from "./pages/dashboard/admin/CertificateManagement";
+import CertificateGenerator from "./pages/dashboard/admin/CertificateGenerator";
+import CertificateTemplates from "./pages/dashboard/admin/CertificateTemplates";
+import StudentIdConfig from "./pages/dashboard/admin/StudentIdConfig";
+import CertificateVerify from "./pages/CertificateVerify";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -134,8 +139,15 @@ const App = () => (
             <Route path="/dashboard/teacher/question-templates" element={<QuestionPaperTemplates />} />
             <Route path="/dashboard/teacher/question-import" element={<QuestionImport />} />
             
-            {/* Admin Branding Settings */}
+            {/* Admin Settings & Certificate Routes */}
             <Route path="/dashboard/branding" element={<SchoolBrandingSettings />} />
+            <Route path="/dashboard/certificates" element={<CertificateManagement />} />
+            <Route path="/dashboard/certificate-generator" element={<CertificateGenerator />} />
+            <Route path="/dashboard/certificate-templates" element={<CertificateTemplates />} />
+            <Route path="/dashboard/student-id-config" element={<StudentIdConfig />} />
+            
+            {/* Public Certificate Verification */}
+            <Route path="/verify-certificate" element={<CertificateVerify />} />
             
             {/* Student Routes */}
             <Route path="/dashboard/student" element={<StudentDashboard />} />
