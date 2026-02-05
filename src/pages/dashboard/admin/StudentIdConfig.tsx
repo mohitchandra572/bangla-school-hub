@@ -214,8 +214,8 @@ export default function StudentIdConfig() {
                 <div>
                   <Label className="font-bangla">সেপারেটর</Label>
                   <Select 
-                    value={config.separator} 
-                    onValueChange={(v) => setConfig({ ...config, separator: v })}
+                    value={config.separator || "none"} 
+                    onValueChange={(v) => setConfig({ ...config, separator: v === "none" ? "" : v })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -223,7 +223,7 @@ export default function StudentIdConfig() {
                     <SelectContent>
                       <SelectItem value="-">হাইফেন (-)</SelectItem>
                       <SelectItem value="/">স্ল্যাশ (/)</SelectItem>
-                      <SelectItem value="">কোনোটি না</SelectItem>
+                      <SelectItem value="none">কোনোটি না</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
